@@ -1,6 +1,7 @@
 package service;
 
 import config.BotConfig;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import model.AnekdotModel;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static service.BotCommands.HELP_TEXT;
@@ -21,14 +23,14 @@ import static service.BotCommands.LIST_OF_COMMANDS;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
-    Logger log = Logger.getLogger(LoggingJul.class.getName());
+    Logger log = Logger.getLogger(TelegramBot.class.getName());
 
     public TelegramBot(BotConfig config) {
         this.config = config;
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e){
-            log.error(e.getMessage());
+            log.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
@@ -93,7 +95,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
             log.info("Reply sent");
         } catch (TelegramApiException e){
-            log.error(e.getMessage());
+            log.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
@@ -106,7 +108,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
             log.info("Reply sent");
         } catch (TelegramApiException e){
-            log.error(e.getMessage());
+            log.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
@@ -122,7 +124,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-
+            log.log(Level.WARNING,e.getMessage(),e);
         }
     }
 }
