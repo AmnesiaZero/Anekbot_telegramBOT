@@ -6,3 +6,4 @@ To do list
 -[]  Parsed data to MySQL DB
 -[] Launch final version
 -[] Add more functionality to the choic of anekdot themes
+-
