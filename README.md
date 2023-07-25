@@ -1,6 +1,5 @@
 # Anekbot
 Simple telegram Java-bot for anekdots with MySql DB
-To do list
 - [x] Add basic functions
 - [ ]  Host on free server
 - [ ]  Parsed data to MySQL DB
