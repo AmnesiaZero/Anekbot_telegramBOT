@@ -8,6 +8,7 @@ class AnekbotApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

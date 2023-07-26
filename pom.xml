@@ -11,8 +11,12 @@
 	<groupId>com.telegrambots</groupId>
 	<artifactId>Anekbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>Anekbot</name>
 	<description>Simple telegram bot with anekdots</description>
+	<modules>
+		<module>dispatcher</module>
+	</modules>
 	<properties>
 		<java.version>20</java.version>
 	</properties>

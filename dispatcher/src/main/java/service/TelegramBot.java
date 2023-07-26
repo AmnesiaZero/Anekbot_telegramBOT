@@ -12,8 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +25,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public TelegramBot(BotConfig config) {
         this.config = config;
+        System.out.println("Токен = " + config.getToken()+ " имя = " + config.getBotName());
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e){
@@ -45,38 +44,41 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(@NotNull Update update) {
-        long chatId = 0;
-        long userId = 0; //это нам понадобится позже
-        String userName = null;
-        String receivedMessage;
-
-        //если получено сообщение текстом
-        if(update.hasMessage()) {
-            chatId = update.getMessage().getChatId();
-            userId = update.getMessage().getFrom().getId();
-            userName = update.getMessage().getFrom().getFirstName();
-
-            if (update.getMessage().hasText()) {
-                receivedMessage = update.getMessage().getText();
-                botAnswerUtils(receivedMessage, chatId, userName);
-            }
-
-            //если нажата одна из кнопок бота
-        } else if (update.hasCallbackQuery()) {
-            chatId = update.getCallbackQuery().getMessage().getChatId();
-            userId = update.getCallbackQuery().getFrom().getId();
-            userName = update.getCallbackQuery().getFrom().getFirstName();
-            receivedMessage = update.getCallbackQuery().getData();
-
-            botAnswerUtils(receivedMessage, chatId, userName);
-        }
+    public void onUpdateReceived( Update update) {
+        var message = update.getMessage();
+        log.info(message.getText());
+//        long chatId = 0;
+//        long userId = 0; //это нам понадобится позже
+//        String userName = null;
+//        String receivedMessage;
+//
+//        //если получено сообщение текстом
+//        if(update.hasMessage()) {
+//            chatId = update.getMessage().getChatId();
+//            userId = update.getMessage().getFrom().getId();
+//            userName = update.getMessage().getFrom().getFirstName();
+//
+//            if (update.getMessage().hasText()) {
+//                receivedMessage = update.getMessage().getText();
+//                botAnswerUtils(receivedMessage, chatId, userName);
+//            }
+//
+//            //если нажата одна из кнопок бота
+//        } else if (update.hasCallbackQuery()) {
+//            chatId = update.getCallbackQuery().getMessage().getChatId();
+//            userId = update.getCallbackQuery().getFrom().getId();
+//            userName = update.getCallbackQuery().getFrom().getFirstName();
+//            receivedMessage = update.getCallbackQuery().getData();
+//
+//            botAnswerUtils(receivedMessage, chatId, userName);
+//        }
     }
 
     private void botAnswerUtils(String receivedMessage, long chatId, String userName) {
         switch (receivedMessage){
             case "/start":
                 startBot(chatId, userName);
+                System.out.println("Выбрал старт");
                 break;
             case "/help":
                 sendHelpText(chatId, HELP_TEXT);
@@ -112,19 +114,5 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void startCommandReceived(Long chatId, String name) {
-        String answer = "Привет,"+name + ",'этот бот может предоставить тебе коллекцию анекдотов на множество тем. Выбери нужную:";
-        sendMessage(chatId, answer);
-    }
 
-    private void sendMessage(Long chatId, String textToSend){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(textToSend);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            log.log(Level.WARNING,e.getMessage(),e);
-        }
-    }
 }

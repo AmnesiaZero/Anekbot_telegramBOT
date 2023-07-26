@@ -29,10 +29,13 @@ public class AnekdotData {
             case 1:
                 text = sql.convertSqlToString(statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=1"));
             case 2:
-                text = sql.convertSqlToString(statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=1"));
+                text = sql.convertSqlToString(statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=2"));
             case 3:
-                text = sql.convertSqlToString(statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=1"));
-             }
+                text = sql.convertSqlToString(statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=3"));
+            default:
+                text = "Введите текст";
+            }
+
              return text;
 
     }
