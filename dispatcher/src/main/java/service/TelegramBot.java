@@ -4,6 +4,7 @@ import config.BotConfig;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import model.AnekdotModel;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -21,7 +22,7 @@ import static service.BotCommands.LIST_OF_COMMANDS;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
-    Logger log = Logger.getLogger(TelegramBot.class.getName());
+    Logger log = LogManager.getLogger(LoggingLog4j.class);
 
     public TelegramBot(BotConfig config) {
         this.config = config;
