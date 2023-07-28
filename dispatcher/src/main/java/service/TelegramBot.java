@@ -26,7 +26,6 @@ import static service.BotCommands.LIST_OF_COMMANDS;
 public class TelegramBot implements LongPollingBot {
     final BotConfig config;
 
-    Logger log = LogManager.getLogger(LoggingLog4j.class);
 
     public TelegramBot(BotConfig config) {
         this.config = config;
@@ -34,20 +33,13 @@ public class TelegramBot implements LongPollingBot {
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (Exception e){
-            log.log(Level.WARNING,e.getMessage(),e);
+            log.error(e);
         }
     }
 
     private void execute(SetMyCommands setMyCommands) {
     }
 
-    public TelegramBot(String botToken) {
-
-        this(new DefaultBotOptions(), botToken);
-    }
-    public TelegramBot(DefaultBotOptions options, String botToken) {
-        super(options, botToken);
-    }
 
 
 
@@ -114,10 +106,10 @@ public class TelegramBot implements LongPollingBot {
         message.setReplyMarkup(Buttons.inlineMarkup());
 
         try {
-            execute(message);
+            log.info(message);
             log.info("Reply sent");
-        } catch (TelegramApiException e){
-            log.log(Level.WARNING,e.getMessage(),e);
+        } catch (Exception e){
+            log.error(e);
         }
     }
 
@@ -125,7 +117,7 @@ public class TelegramBot implements LongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(textToSend);
-        execute(String.valueOf(message));
+        log.info(String.valueOf(message));
         log.info("Reply sent");
     }
 
