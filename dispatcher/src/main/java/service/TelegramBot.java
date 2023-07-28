@@ -3,6 +3,7 @@ package service;
 import config.BotConfig;
 import lombok.extern.log4j.Log4j;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -25,18 +26,20 @@ import static service.BotCommands.LIST_OF_COMMANDS;
 @Log4j
 public class TelegramBot implements LongPollingBot {
     final BotConfig config;
+    @Value("{bot.name}")
+    private String botName;
+    @Value("{bot.token}")
+    private String botToken;
 
-
-    public TelegramBot(BotConfig config) {
+      public TelegramBot(BotConfig config) {
         this.config = config;
-        System.out.println("Токен = " + config.getToken()+ " имя = " + config.getBotName());
+        log.debug("Токен = " + config.getToken()+ " имя = " + config.getBotName());
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (Exception e){
             log.error(e);
         }
     }
-
     private void execute(SetMyCommands setMyCommands) {
     }
 
@@ -48,7 +51,8 @@ public class TelegramBot implements LongPollingBot {
     @Override
     public void onUpdateReceived( Update update) {
         var message = update.getMessage();
-        log.info(message.getText());
+        System.out.println("Сообщение - " + message.getText() + "/////////////////////////////////////////////////////////////////////////////////////////////////");
+//        log.info(message.getText());
 //        long chatId = 0;
 //        long userId = 0; //это нам понадобится позже
 //        String userName = null;
@@ -109,7 +113,7 @@ public class TelegramBot implements LongPollingBot {
             log.info(message);
             log.info("Reply sent");
         } catch (Exception e){
-            log.error(e);
+//            log.error(e);
         }
     }
 
@@ -123,12 +127,10 @@ public class TelegramBot implements LongPollingBot {
 
 
     @Override
-    public String getBotUsername() {
-        return null;
-    }
+    public String getBotUsername() {return botName;}
 
     @Override
     public String getBotToken() {
-        return null;
+        return botToken;
     }
 }
