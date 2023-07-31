@@ -8,5 +8,5 @@ build:
   args: spring-boot:repackage -Pproduction
 
 run:
-  jarName: bag-end-1.0.0.jar
+  jarName: out/artifacts/Anekbot_jar/Anekbot.jar
   containerPort: 8080
