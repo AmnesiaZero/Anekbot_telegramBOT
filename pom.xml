@@ -16,7 +16,8 @@
 	<description>Simple telegram bot with anekdots</description>
 	<modules>
 		<module>dispatcher</module>
-	</modules>
+        <module>common-rabbitmq</module>
+    </modules>
 	<properties>
 		<java.version>20</java.version>
 	</properties>

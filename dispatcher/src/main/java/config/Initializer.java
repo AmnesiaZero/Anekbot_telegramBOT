@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import service.TelegramBot;
+import controller.TelegramBot;
 
 @Log4j
 @Component
