@@ -1,7 +1,9 @@
 package service;
 
 import config.BotConfig;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,35 +36,34 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void execute(SetMyCommands setMyCommands) {
     }
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(@NotNull Update update) {
         var message = update.getMessage();
         log.info(message.getText());
         var response = new SendMessage();
         response.setChatId(message.getChatId().toString());
         response.setText("Hello");
         sendAnswerMessage(response);
+        long chatId = 0;
+        long userId = 0;
+        String userName = null;
+        String receivedMessage;
+        if(update.hasMessage()) {
+            chatId = update.getMessage().getChatId();
+            userId = update.getMessage().getFrom().getId();
+            userName = update.getMessage().getFrom().getFirstName();
 
-//        long chatId = 0;
-//        long userId = 0;
-//        String userName = null;
-//        String receivedMessage;
-//        if(update.hasMessage()) {
-//            chatId = update.getMessage().getChatId();
-//            userId = update.getMessage().getFrom().getId();
-//            userName = update.getMessage().getFrom().getFirstName();
-//
-//            if (update.getMessage().hasText()) {
-//                receivedMessage = update.getMessage().getText();
-//                botAnswerUtils(receivedMessage, chatId, userName);
-//            }
-//        } else if (update.hasCallbackQuery()) {
-//            chatId = update.getCallbackQuery().getMessage().getChatId();
-//            userId = update.getCallbackQuery().getFrom().getId();
-//            userName = update.getCallbackQuery().getFrom().getFirstName();
-//            receivedMessage = update.getCallbackQuery().getData();
-//
-//            botAnswerUtils(receivedMessage, chatId, userName);
-//        }
+            if (update.getMessage().hasText()) {
+                receivedMessage = update.getMessage().getText();
+                botAnswerUtils(receivedMessage, chatId, userName);
+            }
+        } else if (update.hasCallbackQuery()) {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+            userId = update.getCallbackQuery().getFrom().getId();
+            userName = update.getCallbackQuery().getFrom().getFirstName();
+            receivedMessage = update.getCallbackQuery().getData();
+
+            botAnswerUtils(receivedMessage, chatId, userName);
+        }
     }
     public void sendAnswerMessage(SendMessage message){
         if(message!=null){
