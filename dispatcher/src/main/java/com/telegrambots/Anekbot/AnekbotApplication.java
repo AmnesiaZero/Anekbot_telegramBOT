@@ -9,11 +9,11 @@ import service.TelegramBot;
 @SpringBootApplication
 @Log4j
 public class AnekbotApplication {
-	public static void main(String[] args) {
-
-		SpringApplication.run(AnekbotApplication.class);
-
-
-	}
+//	public static void main(String[] args) {
+//
+//		SpringApplication.run(AnekbotApplication.class);
+//
+//
+//	}
 
 }
