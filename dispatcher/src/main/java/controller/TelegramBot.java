@@ -42,12 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
 
     @Override
     public void onUpdateReceived(@NotNull Update update) {
-         var message = update.getMessage();
-         log.debug(message.getText());
-         var response = new SendMessage();
-         response.setChatId(message.getChatId());
-         response.setText("Hi,i'm anekbot");
-         sendAnswerMessage(response);
+         updateController.processUpdate(update);
     }
 
     public void sendAnswerMessage(SendMessage message) {

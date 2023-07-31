@@ -65,6 +65,7 @@ public class UpdateController  {
     }
 
     private void processTextMessage(Update update) {
+
     }
 
 }
