@@ -1,52 +1,48 @@
 package service;
-
 import config.BotConfig;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.core.Response;
-import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import javax.annotation.PostConstruct;
 
-
-import static service.BotCommands.HELP_TEXT;
-import static service.BotCommands.LIST_OF_COMMANDS;
-
-@Component
 @Log4j
-public class TelegramBot extends TelegramLongPollingBot {
+@Component
+public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     final BotConfig config;
 
-    public TelegramBot(BotConfig config) { this.config = config; }
-    @Override
-    public String getBotUsername() { return config.getBotName(); }
-    @Override
-    public String getBotToken() { return config.getToken(); }
-    private void execute(SetMyCommands setMyCommands) {
+    public TelegramBot(BotConfig config) {
+        this.config = config;
+        try {
+            this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e){
+            log.error(e.getMessage());
+        }
     }
+
+
+    @Override
+    public String getBotUsername() {
+        return config.getBotName();
+    }
+
+    @Override
+    public String getBotToken() {
+        return config.getToken();
+    }
+
     @Override
     public void onUpdateReceived(@NotNull Update update) {
-        var message = update.getMessage();
-        log.info(message.getText());
-        var response = new SendMessage();
-        response.setChatId(message.getChatId().toString());
-        response.setText("Hello");
-        sendAnswerMessage(response);
         long chatId = 0;
-        long userId = 0;
+        long userId = 0; //это нам понадобится позже
         String userName = null;
         String receivedMessage;
+
+        //если получено сообщение текстом
         if(update.hasMessage()) {
             chatId = update.getMessage().getChatId();
             userId = update.getMessage().getFrom().getId();
@@ -56,6 +52,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 receivedMessage = update.getMessage().getText();
                 botAnswerUtils(receivedMessage, chatId, userName);
             }
+
+            //если нажата одна из кнопок бота
         } else if (update.hasCallbackQuery()) {
             chatId = update.getCallbackQuery().getMessage().getChatId();
             userId = update.getCallbackQuery().getFrom().getId();
@@ -65,29 +63,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             botAnswerUtils(receivedMessage, chatId, userName);
         }
     }
-    public void sendAnswerMessage(SendMessage message){
-        if(message!=null){
-        try {
-            execute(message);
-        }
-        catch (TelegramApiException e){
-            log.error(e);
-        }
-        }
-    }
-
-
-
-    @Override
-    public void clearWebhook() throws TelegramApiRequestException {
-
-    }
 
     private void botAnswerUtils(String receivedMessage, long chatId, String userName) {
         switch (receivedMessage){
             case "/start":
                 startBot(chatId, userName);
-                System.out.println("Выбрал старт");
                 break;
             case "/help":
                 sendHelpText(chatId, HELP_TEXT);
@@ -103,10 +83,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setReplyMarkup(Buttons.inlineMarkup());
 
         try {
-            log.info(message);
+            execute(message);
             log.info("Reply sent");
-        } catch (Exception e){
-            log.error(e);
+        } catch (TelegramApiException e){
+            log.error(e.getMessage());
         }
     }
 
@@ -114,10 +94,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(textToSend);
-        log.info(String.valueOf(message));
-        log.info("Reply sent");
+
+        try {
+            execute(message);
+            log.info("Reply sent");
+        } catch (TelegramApiException e){
+            log.error(e.getMessage());
+        }
     }
-
-
-
 }
