@@ -5,8 +5,8 @@ meta:
     version: 17
 
 build:
-  args: spring-boot:repackage -Pproduction
+  args: spring-boot:repackage
 
 run:
   jarName: out/artifacts/Anekbot_jar/Anekbot.jar
-  containerPort: 8080
+  containerPort: 80
