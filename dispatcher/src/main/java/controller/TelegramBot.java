@@ -3,8 +3,6 @@ import config.BotConfig;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -15,10 +13,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import service.BotCommands;
-import service.Buttons;
 import sql.AnekdotDAO;
 
 import javax.annotation.PostConstruct;
+import java.sql.SQLException;
 
 @Log4j
 @Data
@@ -55,9 +53,14 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         return config.getToken();
     }
 
+
     @Override
     public void onUpdateReceived(@NotNull Update update) {
-         updateController.processUpdate(update);
+        try {
+            updateController.processUpdate(update);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void sendAnswerMessage(SendMessage message) {

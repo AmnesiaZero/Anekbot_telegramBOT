@@ -22,3 +22,7 @@
 2023-08-02 16:45:51 INFO  UpdateController:86 - Получено текст
 2023-08-02 16:45:51 INFO  UpdateController:87 - Привет
 2023-08-02 16:57:05 INFO  TelegramBot:74 - TelegramAPI started. Look for messages
+2023-08-02 17:51:12 INFO  AnekdotDAO:16 - Вошёл в dataSource
+2023-08-02 17:53:15 INFO  AnekdotDAO:16 - Вошёл в dataSource
+2023-08-02 18:06:16 INFO  AnekdotDAO:16 - Вошёл в dataSource
+2023-08-02 18:06:17 INFO  TelegramBot:84 - TelegramAPI started. Look for messages

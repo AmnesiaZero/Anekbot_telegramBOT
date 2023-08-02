@@ -1,7 +1,7 @@
 package controller;
 
+import lombok.Data;
 import lombok.extern.log4j.Log4j;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,10 +9,12 @@ import service.Buttons;
 import sql.AnekdotDAO;
 import utils.MessageUtils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-@Component
+
 @Log4j
+@Data
 public class UpdateController  {
     private TelegramBot telegramBot;
     private MessageUtils messageUtils;
@@ -26,7 +28,7 @@ public class UpdateController  {
         this.telegramBot = telegramBot;
 
     }
-    public void processUpdate(Update update){
+    public void processUpdate(Update update) throws SQLException {
         if(update==null){
             log.error("Received update is null");
             return;
@@ -38,7 +40,7 @@ public class UpdateController  {
             log.error("Message is null");
     }
 
-    private void distributeMessageByType(Update update) {
+    private void distributeMessageByType(Update update) throws SQLException {
         var message = update.getMessage();
         if(message.getText()!=null){
             processTextMessage(update);
@@ -85,12 +87,11 @@ public class UpdateController  {
         setView(sendMessage);
     }
 
-    private void processTextMessage(Update update) {
-        Message receivedMessage = update.getMessage();
-        String messageText = receivedMessage.getText();
-        Long chatId = receivedMessage.getChatId();
+    private void processTextMessage(Update update) throws SQLException {
+        String receivedMessage = update.getCallbackQuery().getData();
         String userName = update.getCallbackQuery().getFrom().getUserName();
-        switch (messageText) {
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
+        switch (receivedMessage) {
             case "/start":
                 startBot(chatId, userName);
                 break;
@@ -108,11 +109,16 @@ public class UpdateController  {
         message.setReplyMarkup(Buttons.inlineMarkup());
         setView(message);
     }
-    private void choseAnekdot(Long chatId,String userName,Update update){
+    private void choseAnekdot(Long chatId,String userName,Update update) throws SQLException {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Выберите тему анекдота");
-        ArrayList<String> themes = AnekdotDAO.
+        String replyText = "";
+        ArrayList<String> themes = getTelegramBot().getAnekdotDAO().getThemes();
+        for(int i =0;i<themes.size();i++) {
+            int themeNumber = i + 1;
+            replyText += themeNumber + ")" + themes.get(i) + "\n";
+        }
 
 
     }

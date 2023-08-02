@@ -2,27 +2,19 @@ package sql;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
-import org.springframework.stereotype.Component;
-import service.RandomGenerator;
-import sql.DataSource;
-import sql.SqlConverter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
-@Component
 @Log4j
 @Data
 public class AnekdotDAO {
     public DataSource dataSource;
-    public AnekdotDAO() throws SQLException {
+    public AnekdotDAO(DataSource dataSource) throws SQLException {
         log.info("Вошёл в dataSource");
-        try {
-            dataSource = new DataSource();
-        } catch (SQLException e) {
-            log.error(e);
-        }
+            this.dataSource = dataSource;
     }
     public String getAnekdot(int themeId) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
@@ -30,11 +22,11 @@ public class AnekdotDAO {
         String anekdotText = SqlConverter.convertSqlToString(resultSet);
         return anekdotText;
     }
-    public String getThemes() throws SQLException {
+    public ArrayList<String> getThemes() throws SQLException {
         Statement statement = dataSource.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT theme FROM anekdot_store ORDER BY ASC");
-        String anekdotText = SqlConverter.convertSqlToString(resultSet);
-        return anekdotText;
+        ArrayList<String> themes = SqlConverter.convertSqlQueryToStringArray(resultSet);
+        return themes;
     }
 
 
