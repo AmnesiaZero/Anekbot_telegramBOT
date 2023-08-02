@@ -17,6 +17,7 @@ import java.sql.Statement;
 public class AnekdotDAO {
     public DataSource dataSource;
     public AnekdotDAO() throws SQLException {
+        log.info("Вошёл в dataSource");
         try {
             dataSource = new DataSource();
         } catch (SQLException e) {
