@@ -65,6 +65,12 @@ public class UpdateController  {
     }
 
     private void processTextMessage(Update update) {
+        var recievedMessage = update.getMessage();
+        log.info("Получено сообщение");
+        log.info(recievedMessage.getText());
+
+
+
 
 
     }

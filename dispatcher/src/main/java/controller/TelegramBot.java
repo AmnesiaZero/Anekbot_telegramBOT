@@ -24,10 +24,10 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         this.config = config;
         this.updateController = updateController;
     }
-    @PostConstruct
-    public void init(){
-        updateController.registerBot(this);
-    }
+//    @PostConstruct
+//    public void init(){
+//        updateController.registerBot(this);
+//    }
 
 
     @Override
