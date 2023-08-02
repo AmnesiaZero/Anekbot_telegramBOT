@@ -12,7 +12,6 @@ public class Buttons {
     public static InlineKeyboardMarkup inlineMarkup() {
         START_BUTTON.setCallbackData("/start");
         HELP_BUTTON.setCallbackData("/help");
-
         List<InlineKeyboardButton> rowInline = List.of(START_BUTTON, HELP_BUTTON);
         List<List<InlineKeyboardButton>> rowsInLine = List.of(rowInline);
 

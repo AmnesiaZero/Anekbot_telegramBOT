@@ -8,10 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Log4j
 public class AnekbotApplication {
 	public static void main(String[] args) {
-
 		SpringApplication.run(AnekbotApplication.class);
-
-
 	}
-
 }
