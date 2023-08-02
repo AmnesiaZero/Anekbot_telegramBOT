@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import service.BotCommands;
 import service.Buttons;
+import sql.AnekdotDAO;
 
 import javax.annotation.PostConstruct;
 
@@ -25,8 +26,9 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     final int RECONNECT_PAUSE =10000;
     final BotConfig config;
     private UpdateController updateController;
+    public AnekdotDAO anekdotDAO;
 
-    public TelegramBot(BotConfig config,UpdateController updateController) {
+    public TelegramBot(BotConfig config,UpdateController updateController,AnekdotDAO anekdotDAO) {
         this.config = config;
         this.updateController = updateController;
         try {
@@ -34,6 +36,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         } catch (TelegramApiException e){
             log.error(e.getMessage());
         }
+        this.anekdotDAO = anekdotDAO;
     }
 
 //    @PostConstruct

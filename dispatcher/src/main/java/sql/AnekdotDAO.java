@@ -30,6 +30,12 @@ public class AnekdotDAO {
         String anekdotText = SqlConverter.convertSqlToString(resultSet);
         return anekdotText;
     }
+    public String getThemes() throws SQLException {
+        Statement statement = dataSource.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT theme FROM anekdot_store ORDER BY ASC");
+        String anekdotText = SqlConverter.convertSqlToString(resultSet);
+        return anekdotText;
+    }
 
 
 }

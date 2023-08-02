@@ -5,7 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import service.Buttons;
+import sql.AnekdotDAO;
 import utils.MessageUtils;
+
+import java.util.ArrayList;
 
 @Component
 @Log4j
@@ -82,12 +86,34 @@ public class UpdateController  {
     }
 
     private void processTextMessage(Update update) {
-        Message recievedMessage = update.getMessage();
-        log.info("Получено текст");
-        log.info(recievedMessage.getText());
-        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update,"Ура,текст!");
-        sendMessage.setChatId(recievedMessage.getChatId());
-        setView(sendMessage);
-    }
+        Message receivedMessage = update.getMessage();
+        String messageText = receivedMessage.getText();
+        Long chatId = receivedMessage.getChatId();
+        String userName = update.getCallbackQuery().getFrom().getUserName();
+        switch (messageText) {
+            case "/start":
+                startBot(chatId, userName);
+                break;
+            case "/анекдот":
+                  choseAnekdot(chatId,userName,update);
 
+            default:
+                break;
+        }
+    }
+    private void startBot(Long chatId,String userName){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Привет, " + userName + "! Я - анекбот,что хочешь сделать?'");
+        message.setReplyMarkup(Buttons.inlineMarkup());
+        setView(message);
+    }
+    private void choseAnekdot(Long chatId,String userName,Update update){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Выберите тему анекдота");
+        ArrayList<String> themes = AnekdotDAO.
+
+
+    }
 }
