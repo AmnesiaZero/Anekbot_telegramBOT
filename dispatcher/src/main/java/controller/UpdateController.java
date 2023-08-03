@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import service.Buttons;
 import sql.AnekdotDAO;
 import utils.MessageUtils;
+import java.util.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -88,37 +89,34 @@ public class UpdateController  {
     }
 
     private void processTextMessage(Update update) throws SQLException {
-        String receivedMessage = update.getCallbackQuery().getData();
-        String userName = update.getCallbackQuery().getFrom().getUserName();
+        Message receivedMessage = update.getMessage();
+        String receivedMessageText = receivedMessage.getText();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        switch (receivedMessage) {
-            case "/start":
-                startBot(chatId, userName);
-                break;
-            case "/анекдот":
-                  choseAnekdot(chatId,userName,update);
-
-            default:
-                break;
-        }
+        if(receivedMessageText=="/start") startBot(chatId);
+        else if(receivedMessageText=="/анекдот") choseAnekdot(chatId);
+        else if(receivedMessageText.toLowerCase().indexOf("/тема")!=-1) getTelegramBot().getAnekdotDAO().getAnekdot(receivedMessageText);
     }
-    private void startBot(Long chatId,String userName){
+    private void startBot(Long chatId){
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText("Привет, " + userName + "! Я - анекбот,что хочешь сделать?'");
+        message.setText("Привет,приколист! Я - анекбот,что хочешь сделать?'");
         message.setReplyMarkup(Buttons.inlineMarkup());
         setView(message);
     }
-    private void choseAnekdot(Long chatId,String userName,Update update) throws SQLException {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Выберите тему анекдота");
+    private void choseAnekdot(Long chatId) throws SQLException {
+        SendMessage messageThemeChoose = new SendMessage();
+        messageThemeChoose.setChatId(chatId);
+        messageThemeChoose.setText("Выберите тему анекдота");
         String replyText = "";
         ArrayList<String> themes = getTelegramBot().getAnekdotDAO().getThemes();
         for(int i =0;i<themes.size();i++) {
             int themeNumber = i + 1;
             replyText += themeNumber + ")" + themes.get(i) + "\n";
         }
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(replyText);
+        setView(message);
 
 
     }
