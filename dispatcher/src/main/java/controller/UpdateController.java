@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 public class UpdateController  {
     private TelegramBot telegramBot;
     private MessageUtils messageUtils;
+    private String userName = "Приколист";
+    private Long chatId = 0L;
 
     public UpdateController(MessageUtils messageUtils) {
         this.messageUtils = messageUtils;
@@ -29,11 +32,15 @@ public class UpdateController  {
         this.telegramBot = telegramBot;
 
     }
-    public void processUpdate(Update update) throws SQLException {
-        if(update==null){
-            log.error("Received update is null");
-            return;
+    public void processUpdate(@NotNull Update update) throws SQLException {
+        if(update.getMessage().getChatId()!=null){
+            chatId = update.getMessage().getChatId();
         }
+        else log.error("Чат id не найден");
+        if(update.getMessage().getFrom().getUserName()!=null){
+            userName = update.getMessage().getFrom().getUserName();
+        }
+        else log.error("Username не найден");
         if(update.getMessage()!=null){
             distributeMessageByType(update);
         }
@@ -91,7 +98,6 @@ public class UpdateController  {
     private void processTextMessage(Update update) throws SQLException {
         Message receivedMessage = update.getMessage();
         String receivedMessageText = receivedMessage.getText();
-        Long chatId = update.getCallbackQuery().getMessage().getChatId();
         if(receivedMessageText=="/start") startBot(chatId);
         else if(receivedMessageText=="/анекдот") choseAnekdot(chatId);
         else if(receivedMessageText.toLowerCase().indexOf("/тема")!=-1) getTelegramBot().getAnekdotDAO().getAnekdot(receivedMessageText);
