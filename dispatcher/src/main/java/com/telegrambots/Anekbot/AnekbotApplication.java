@@ -13,14 +13,8 @@ import java.sql.SQLException;
 //@SpringBootApplication
 @Log4j
 public class AnekbotApplication {
-	public static void main(String[] args) throws SQLException, TelegramApiException {
-		MessageUtils messageUtils = new MessageUtils();
-		UpdateController updateController = new UpdateController(messageUtils);
-		BotConfig botConfig = new BotConfig();
-		DataSource dataSource = new DataSource();
-		AnekdotDAO anekdotDAO = new AnekdotDAO(dataSource);
-		TelegramBot telegramBot = new TelegramBot(botConfig,updateController,anekdotDAO);
-		updateController.registerBot(telegramBot);
-		telegramBot.botConnect();
+	public static void main(String[] args) throws SQLException{
+		TelegramBot telegramBot = new TelegramBot();
+		telegramBot.getUpdateController().registerBot(telegramBot);
 	}
 }

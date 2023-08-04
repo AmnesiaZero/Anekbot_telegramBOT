@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import service.BotCommands;
 import sql.AnekdotDAO;
+import sql.DataSource;
+import sql.ThemesDAO;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
@@ -24,18 +26,25 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     final int RECONNECT_PAUSE =10000;
     final BotConfig config;
     private UpdateController updateController;
-    public AnekdotDAO anekdotDAO;
+    private SqlController sqlController;
 
-    public TelegramBot(BotConfig config,UpdateController updateController,AnekdotDAO anekdotDAO) {
-        this.config = config;
-        this.updateController = updateController;
+    public TelegramBot() throws SQLException {
+        this.config = new BotConfig();
+        this.updateController = new UpdateController();
+        DataSource dataSource = new DataSource();
+        loadSqlController(dataSource);
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e){
             log.error(e.getMessage());
         }
-        this.anekdotDAO = anekdotDAO;
     }
+    private void loadSqlController(DataSource dataSource) throws SQLException {
+        sqlController = new SqlController();
+        sqlController.setAnekdotDAO(new AnekdotDAO(dataSource));
+        sqlController.setThemesDAO(new ThemesDAO(dataSource));
+    }
+
 
 //    @PostConstruct
 //    public void init(){

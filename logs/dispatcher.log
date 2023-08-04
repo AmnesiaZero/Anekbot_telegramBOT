@@ -1,34 +1,29 @@
-2023-07-28 15:52:05 INFO  AnekbotApplication:12 - Программа заработала
-2023-08-02 14:11:31 DEBUG AnekbotApplication:19 - Bot name = null,bot token = null
-2023-08-02 16:06:04 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:09:25 INFO  TelegramBot:77 - TelegramAPI started. Look for messages
-2023-08-02 16:09:26 ERROR UpdateController:34 - Message is null
-2023-08-02 16:09:26 INFO  UpdateController:55 - Получено сообщение
-2023-08-02 16:09:26 INFO  UpdateController:56 - 
-2023-08-02 16:11:50 INFO  TelegramBot:77 - TelegramAPI started. Look for messages
-2023-08-02 16:11:57 INFO  UpdateController:86 - Получено сообщение
-2023-08-02 16:11:57 INFO  UpdateController:87 - sdasdadada
-2023-08-02 16:14:15 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:35:31 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:37:02 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:37:27 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:38:06 ERROR TelegramBot:36 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [404] Not Found
-2023-08-02 16:40:58 INFO  TelegramBot:75 - TelegramAPI started. Look for messages
-2023-08-02 16:40:58 INFO  UpdateController:86 - Получено сообщение
-2023-08-02 16:40:58 INFO  UpdateController:87 - hi
-2023-08-02 16:41:08 INFO  UpdateController:86 - Получено сообщение
-2023-08-02 16:41:08 INFO  UpdateController:87 - Ты разговариваешь
-2023-08-02 16:45:46 INFO  TelegramBot:74 - TelegramAPI started. Look for messages
-2023-08-02 16:45:51 INFO  UpdateController:86 - Получено текст
-2023-08-02 16:45:51 INFO  UpdateController:87 - Привет
-2023-08-02 16:57:05 INFO  TelegramBot:74 - TelegramAPI started. Look for messages
-2023-08-02 17:51:12 INFO  AnekdotDAO:16 - Вошёл в dataSource
-2023-08-02 17:53:15 INFO  AnekdotDAO:16 - Вошёл в dataSource
-2023-08-02 18:06:16 INFO  AnekdotDAO:16 - Вошёл в dataSource
-2023-08-02 18:06:17 INFO  TelegramBot:84 - TelegramAPI started. Look for messages
-2023-08-02 18:10:59 INFO  AnekdotDAO:16 - Вошёл в dataSource
-2023-08-02 18:11:00 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
-2023-08-03 17:10:29 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
-2023-08-03 17:10:30 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
-2023-08-03 17:13:55 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
-2023-08-03 17:13:57 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
+2023-08-04 12:42:19 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 12:42:20 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
+2023-08-04 12:42:26 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-04 12:42:26 DEBUG UpdateController:51 - Вошёл в функцкию distributeMessageByType
+2023-08-04 12:42:26 DEBUG UpdateController:100 - Вошёл в функцкию processTextMessage
+2023-08-04 12:42:26 DEBUG UpdateController:103 - /theme
+2023-08-04 12:42:26 DEBUG UpdateController:128 - Вошёл в фукнцию choseAnekdot
+2023-08-04 12:42:29 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-04 12:42:29 DEBUG UpdateController:51 - Вошёл в функцкию distributeMessageByType
+2023-08-04 12:42:29 DEBUG UpdateController:100 - Вошёл в функцкию processTextMessage
+2023-08-04 12:42:29 DEBUG UpdateController:103 - 1
+2023-08-04 12:42:29 INFO  UpdateController:115 - Была введена не команда,текст сообщения - 1
+2023-08-04 13:00:34 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 13:00:35 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
+2023-08-04 13:00:42 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:00:42 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 13:00:42 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 13:00:42 DEBUG UpdateController:101 - /start
+2023-08-04 13:00:50 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:00:55 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:00:57 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:02:49 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 13:02:51 INFO  TelegramBot:80 - TelegramAPI started. Look for messages
+2023-08-04 13:02:55 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:02:55 DEBUG UpdateController:50 - Вошёл в функцкию distributeMessageByType
+2023-08-04 13:02:55 DEBUG UpdateController:99 - Вошёл в функцкию processTextMessage
+2023-08-04 13:02:55 DEBUG UpdateController:102 - /start
+2023-08-04 13:02:57 DEBUG UpdateController:32 - Вошёл в функцкию processUpdate
+2023-08-04 13:02:57 ERROR UpdateController:46 - Message is null

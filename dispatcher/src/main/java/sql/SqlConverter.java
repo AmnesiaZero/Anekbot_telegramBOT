@@ -10,10 +10,10 @@ public class SqlConverter {
         resultSet.next();
         return resultSet.getString(1);
     }
-    public static ArrayList<String> convertSqlQueryToStringArray(ResultSet resultSet) throws SQLException{
+    public static ArrayList<String> convertSqlQueryToStringArrayList(ResultSet resultSet,String columnLabel) throws SQLException{
         ArrayList<String> themes = new ArrayList<>();
         while (resultSet.next()){
-            String theme = resultSet.getString("theme");
+            String theme = resultSet.getString(columnLabel);
             themes.add(theme);
         }
         return themes;

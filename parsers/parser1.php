@@ -13,6 +13,7 @@ function parser(){
     foreach($aArray as $a){
         $theme = $a->getAttribute('title');
         $theme = clean($theme,$cn);
+        mysqli_query($cn,"INSERT INTO `anekdot_themes`(`id`, `theme`) VALUES (NULL,'$theme')");
         $linkToCategory = getFullLink($a,"https://www.anekdot.ru");
         parseCategory($linkToCategory,$theme,$cn);
     }
@@ -21,6 +22,7 @@ function parser(){
 function parseCategory($url,$theme,$cn){
     echo "Категория = $theme";
     $flag = true;
+    $themeId = convertMysqliToInt(mysqli_query($cn,"SELECT MAX(id) FROM `anekdot_themes`"));
     $html = str_get_html(getHtml($url));
     $counter = 1;
     while($flag){
@@ -28,7 +30,7 @@ function parseCategory($url,$theme,$cn){
         foreach($texts as $text){
             $text = str_replace("<br>","\n",$text);
             $text = clean(strip_tags($text),$cn);
-            $sql = "INSERT INTO `anekdot_store`(`id`, `theme`, `text`) VALUES (NULL,'$theme','$text')";
+            $sql = "INSERT INTO `anekdot_store`(`id`, `theme_id`, `text`) VALUES (NULL,$themeId,'$text')";
             echo "Тема - $theme,анекдот номер - $counter////";
             mysqli_query($cn,$sql);
             $counter++;

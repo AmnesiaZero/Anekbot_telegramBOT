@@ -16,18 +16,13 @@ public class AnekdotDAO {
              log.info("Создал объект AnekdotDAO");
               this.dataSource = dataSource;
     }
-    public String getAnekdot(String themeId) throws SQLException {
+    public String getAnekdot(int themeId) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme=" + themeId + "ORDER BY RAND ()LIMIT 1");
+        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id=" + themeId + "ORDER BY RAND ()LIMIT 1");
         String anekdotText = SqlConverter.convertSqlToString(resultSet);
         return anekdotText;
     }
-    public ArrayList<String> getThemes() throws SQLException {
-        Statement statement = dataSource.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT DISTINCT theme FROM anekdot_store ORDER BY ASC");
-        ArrayList<String> themes = SqlConverter.convertSqlQueryToStringArray(resultSet);
-        return themes;
-    }
+
 
 
 }

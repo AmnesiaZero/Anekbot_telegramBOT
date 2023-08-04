@@ -14,34 +14,33 @@ import java.util.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static service.BotCommands.HELP_TEXT;
+
 
 @Log4j
 @Data
 public class UpdateController  {
     private TelegramBot telegramBot;
-    private MessageUtils messageUtils;
     private String userName = "Приколист";
-    private Long chatId = 0L;
-
-    public UpdateController(MessageUtils messageUtils) {
-        this.messageUtils = messageUtils;
-    }
-
-
+    private Long chatId;
+    private final int chooseAnekdotState = 1;
+    private final int defualtState = 0;
+    private int currentState = defualtState;
     public void registerBot(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
-
     }
     public void processUpdate(@NotNull Update update) throws SQLException {
-        if(update.getMessage().getChatId()!=null){
-            chatId = update.getMessage().getChatId();
-        }
-        else log.error("Чат id не найден");
-        if(update.getMessage().getFrom().getUserName()!=null){
-            userName = update.getMessage().getFrom().getUserName();
-        }
-        else log.error("Username не найден");
-        if(update.getMessage()!=null){
+        log.debug("Вошёл в функцкию processUpdate");
+        if(update.getMessage()!=null) {
+            if (update.getMessage().getChatId() != null)
+                 chatId = update.getMessage().getChatId();
+             else
+                 log.error("Чат id не найден");
+            if (update.getMessage().getFrom().getUserName() != null)
+                userName = update.getMessage().getFrom().getUserName();
+             else
+                 log.error("Username не найден");
+
             distributeMessageByType(update);
         }
         else
@@ -49,6 +48,7 @@ public class UpdateController  {
     }
 
     private void distributeMessageByType(Update update) throws SQLException {
+        log.debug("Вошёл в функцкию distributeMessageByType");
         var message = update.getMessage();
         if(message.getText()!=null){
             processTextMessage(update);
@@ -68,12 +68,13 @@ public class UpdateController  {
         var recievedMessage = update.getMessage();
         log.info("Получено неподдерживаемое сообщение");
         log.info(recievedMessage.getText());
-        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update,"Скинь что-то более понятное");
+        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,"Скинь что-то более понятное");
         sendMessage.setChatId(recievedMessage.getChatId());
         setView(sendMessage);
     }
 
     private void setView(SendMessage message) {
+        //тут должна быть доп. обёртка для вьюхи,но её пока нет
         telegramBot.sendAnswerMessage(message);
     }
 
@@ -81,7 +82,7 @@ public class UpdateController  {
         Message recievedMessage = update.getMessage();
         log.info("Получено фото");
         log.info(recievedMessage.getText());
-        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update,"Спасибо за фото,хочешь анекдот?");
+        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,"Спасибо за фото,хочешь анекдот?");
         sendMessage.setChatId(recievedMessage.getChatId());
         setView(sendMessage);
     }
@@ -90,40 +91,54 @@ public class UpdateController  {
         Message recievedMessage = update.getMessage();
         log.info("Получен документ");
         log.info(recievedMessage.getText());
-        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update,"зачем мне документ............");
+        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,"зачем мне документ............");
         sendMessage.setChatId(recievedMessage.getChatId());
         setView(sendMessage);
     }
 
     private void processTextMessage(Update update) throws SQLException {
+        log.debug("Вошёл в функцкию processTextMessage");
         Message receivedMessage = update.getMessage();
         String receivedMessageText = receivedMessage.getText();
-        if(receivedMessageText=="/start") startBot(chatId);
-        else if(receivedMessageText=="/анекдот") choseAnekdot(chatId);
-        else if(receivedMessageText.toLowerCase().indexOf("/тема")!=-1) getTelegramBot().getAnekdotDAO().getAnekdot(receivedMessageText);
+        log.debug(receivedMessageText);
+        if(currentState==chooseAnekdotState&&receivedMessageText!="/back")
+        switch (receivedMessageText){
+            case "/start":
+                sendStartText(update);
+                break;
+            case "/help":
+                sendHelpText(update);
+                break;
+            case "/theme":
+                displayThemes(update);
+                break;
+            case "/back":
+                currentState = defualtState;
+                break;
+            default:
+                log.info("Была введена не команда,текст сообщения - " + receivedMessageText);
+                break;
+        }
     }
-    private void startBot(Long chatId){
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Привет,приколист! Я - анекбот,что хочешь сделать?'");
+    private void sendStartText(Update update){
+        SendMessage message = MessageUtils.generateSendMessageWithText(update,"Привет,приколист! Хочешь анекдотов?");
         message.setReplyMarkup(Buttons.inlineMarkup());
         setView(message);
     }
-    private void choseAnekdot(Long chatId) throws SQLException {
-        SendMessage messageThemeChoose = new SendMessage();
-        messageThemeChoose.setChatId(chatId);
-        messageThemeChoose.setText("Выберите тему анекдота");
-        String replyText = "";
-        ArrayList<String> themes = getTelegramBot().getAnekdotDAO().getThemes();
+    private void sendHelpText(Update update){
+        SendMessage message = MessageUtils.generateSendMessageWithText(update,HELP_TEXT);
+        setView(message);
+    }
+    private void displayThemes(Update update) throws SQLException {
+        log.debug("Вошёл в фукнцию choseAnekdot");
+        String replyText = "Выберите тему анекдота:\n";
+        ArrayList<String> themes = telegramBot.getSqlController().getThemesDAO().getThemes();
         for(int i =0;i<themes.size();i++) {
             int themeNumber = i + 1;
             replyText += themeNumber + ")" + themes.get(i) + "\n";
         }
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(replyText);
-        setView(message);
-
-
+        SendMessage anekdotMessage = MessageUtils.generateSendMessageWithText(update,replyText);
+        setView(anekdotMessage);
+        currentState = chooseAnekdotState;
     }
 }
