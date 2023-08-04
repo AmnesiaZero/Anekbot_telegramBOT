@@ -19,7 +19,7 @@ function convertMysqliToString($msqli){
     }
     function clean($string,$cn){
         $string = mysqli_real_escape_string($cn,$string);
-        return str_replace(array("\\n","\\",")","(","'",'"'),"",$string);
+        return str_replace(array(")","(","'",'"'),"",$string);
     }
     function getHtml($url){
         $ch = curl_init($url);//запускаем и настраиваем парсер

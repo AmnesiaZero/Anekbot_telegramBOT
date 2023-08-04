@@ -28,11 +28,12 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     private UpdateController updateController;
     private SqlController sqlController;
 
-    public TelegramBot() throws SQLException {
+    public TelegramBot() throws SQLException, TelegramApiException {
         this.config = new BotConfig();
         this.updateController = new UpdateController();
         DataSource dataSource = new DataSource();
         loadSqlController(dataSource);
+        botConnect();
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e){

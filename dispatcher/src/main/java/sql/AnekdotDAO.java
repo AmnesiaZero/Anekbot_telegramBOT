@@ -16,9 +16,10 @@ public class AnekdotDAO {
              log.info("Создал объект AnekdotDAO");
               this.dataSource = dataSource;
     }
-    public String getAnekdot(int themeId) throws SQLException {
+    public String getAnekdot(String themeId) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id=" + themeId + "ORDER BY RAND ()LIMIT 1");
+        log.debug(themeId);
+        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id="+ themeId + " LIMIT 1;");
         String anekdotText = SqlConverter.convertSqlToString(resultSet);
         return anekdotText;
     }

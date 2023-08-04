@@ -13,7 +13,7 @@ import java.sql.SQLException;
 //@SpringBootApplication
 @Log4j
 public class AnekbotApplication {
-	public static void main(String[] args) throws SQLException{
+	public static void main(String[] args) throws SQLException, TelegramApiException {
 		TelegramBot telegramBot = new TelegramBot();
 		telegramBot.getUpdateController().registerBot(telegramBot);
 	}

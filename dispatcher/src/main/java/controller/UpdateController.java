@@ -7,9 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import service.Buttons;
-import sql.AnekdotDAO;
 import utils.MessageUtils;
-import java.util.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,7 +99,6 @@ public class UpdateController  {
         Message receivedMessage = update.getMessage();
         String receivedMessageText = receivedMessage.getText();
         log.debug(receivedMessageText);
-        if(currentState==chooseAnekdotState&&receivedMessageText!="/back")
         switch (receivedMessageText){
             case "/start":
                 sendStartText(update);
@@ -112,18 +109,25 @@ public class UpdateController  {
             case "/theme":
                 displayThemes(update);
                 break;
-            case "/back":
-                currentState = defualtState;
-                break;
             default:
-                log.info("Была введена не команда,текст сообщения - " + receivedMessageText);
-                break;
+               if(currentState == chooseAnekdotState)
+                   sendAnekdotText(update,receivedMessageText);
+               else
+                   log.debug("Была введна не команда,текст - " + receivedMessageText);
+               break;
         }
     }
     private void sendStartText(Update update){
         SendMessage message = MessageUtils.generateSendMessageWithText(update,"Привет,приколист! Хочешь анекдотов?");
         message.setReplyMarkup(Buttons.inlineMarkup());
         setView(message);
+    }
+    private void sendAnekdotText(Update update, String receivedMessageText) throws SQLException {
+        log.debug("Вошёл в функцию sendAnekdotText");
+        String anekdotText = telegramBot.getSqlController().getAnekdotDAO().getAnekdot(receivedMessageText);
+        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,anekdotText);
+        setView(sendMessage);
+        currentState = defualtState;
     }
     private void sendHelpText(Update update){
         SendMessage message = MessageUtils.generateSendMessageWithText(update,HELP_TEXT);
