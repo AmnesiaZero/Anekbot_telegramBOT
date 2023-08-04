@@ -18,8 +18,9 @@ function convertMysqliToString($msqli){
         return intval($mysqli[0]); 
     }
     function clean($string,$cn){
-        $string = mysqli_real_escape_string($cn,$string);
-        return str_replace(array(")","(","'",'"'),"",$string);
+        $string = str_replace(array(")","(","'",'"'),"",$string);
+        return mysqli_real_escape_string($cn,$string);
+       
     }
     function getHtml($url){
         $ch = curl_init($url);//запускаем и настраиваем парсер

@@ -21,9 +21,10 @@ public class UpdateController  {
     private TelegramBot telegramBot;
     private String userName = "Приколист";
     private Long chatId;
-    private final int chooseAnekdotState = 1;
-    private final int defualtState = 0;
-    private int currentState = defualtState;
+    private final int defaultState = 0;
+    private final int chooseThemeState = 1;
+    private final int chooseAnekdotState = 2;
+    private int currentState = defaultState;
     public void registerBot(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
     }
@@ -107,9 +108,11 @@ public class UpdateController  {
                 sendHelpText(update);
                 break;
             case "/theme":
-                displayThemes(update);
+                chooseThemeLetter(update);
                 break;
             default:
+                if(currentState==chooseThemeState)
+                    displayThemes(update,receivedMessageText);
                if(currentState == chooseAnekdotState)
                    sendAnekdotText(update,receivedMessageText);
                else
@@ -127,16 +130,21 @@ public class UpdateController  {
         String anekdotText = telegramBot.getSqlController().getAnekdotDAO().getAnekdot(receivedMessageText);
         SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,anekdotText);
         setView(sendMessage);
-        currentState = defualtState;
+        currentState = defaultState;
     }
     private void sendHelpText(Update update){
         SendMessage message = MessageUtils.generateSendMessageWithText(update,HELP_TEXT);
         setView(message);
     }
-    private void displayThemes(Update update) throws SQLException {
+    private void chooseThemeLetter(Update update){
+        SendMessage message = MessageUtils.generateSendMessageWithText(update,"Выберите первую букву темы");
+        setView(message);
+        currentState = chooseThemeState;
+    }
+    private void displayThemes(Update update, String receivedMessageText) throws SQLException {
         log.debug("Вошёл в фукнцию choseAnekdot");
         String replyText = "Выберите тему анекдота:\n";
-        ArrayList<String> themes = telegramBot.getSqlController().getThemesDAO().getThemes();
+        ArrayList<String> themes = telegramBot.getSqlController().getThemesDAO().getThemes(receivedMessageText);
         for(int i =0;i<themes.size();i++) {
             int themeNumber = i + 1;
             replyText += themeNumber + ")" + themes.get(i) + "\n";

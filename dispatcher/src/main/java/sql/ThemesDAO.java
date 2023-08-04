@@ -15,7 +15,7 @@ public class ThemesDAO {
         log.info("Создал объект ThemesDao");
         this.dataSource = dataSource;
     }
-    public ArrayList<String> getThemes() throws SQLException {
+    public ArrayList<String> getThemes(String receivedMessageText) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT theme FROM anekdot_themes ORDER BY id ASC");
         ArrayList<String> themes = SqlConverter.convertSqlQueryToStringArrayList(resultSet,"theme");

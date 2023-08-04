@@ -19,7 +19,7 @@ public class AnekdotDAO {
     public String getAnekdot(String themeId) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
         log.debug(themeId);
-        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id="+ themeId + " LIMIT 1;");
+        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id="+ themeId +"LIMIT 1");
         String anekdotText = SqlConverter.convertSqlToString(resultSet);
         return anekdotText;
     }

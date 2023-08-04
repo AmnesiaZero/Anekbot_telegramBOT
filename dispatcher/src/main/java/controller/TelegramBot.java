@@ -16,8 +16,6 @@ import service.BotCommands;
 import sql.AnekdotDAO;
 import sql.DataSource;
 import sql.ThemesDAO;
-
-import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 
 @Log4j

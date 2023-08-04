@@ -166,3 +166,82 @@
 2023-08-04 15:36:30 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
 2023-08-04 15:36:30 DEBUG UpdateController:101 - 4
 2023-08-04 15:36:30 DEBUG UpdateController:116 - Была введна не команда,текст - 4
+2023-08-04 15:37:30 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 15:37:30 INFO  ThemesDAO:15 - Создал объект ThemesDao
+2023-08-04 15:37:31 INFO  TelegramBot:90 - TelegramAPI started. Look for messages
+2023-08-04 15:37:32 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:32 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 15:37:32 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 15:37:32 DEBUG UpdateController:101 - /theme
+2023-08-04 15:37:32 DEBUG UpdateController:137 - Вошёл в фукнцию choseAnekdot
+2023-08-04 15:37:37 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:37 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 15:37:37 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 15:37:37 DEBUG UpdateController:101 - 3
+2023-08-04 15:37:37 DEBUG UpdateController:126 - Вошёл в функцию sendAnekdotText
+2023-08-04 15:37:37 DEBUG AnekdotDAO:21 - 3
+2023-08-04 15:37:44 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:44 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 15:37:44 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 15:37:44 DEBUG UpdateController:101 - /start
+2023-08-04 15:37:46 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:46 ERROR UpdateController:45 - Message is null
+2023-08-04 15:37:46 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:46 ERROR UpdateController:45 - Message is null
+2023-08-04 15:37:47 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:47 ERROR UpdateController:45 - Message is null
+2023-08-04 15:37:50 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:50 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 15:37:50 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 15:37:50 DEBUG UpdateController:101 - /help
+2023-08-04 15:37:56 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 15:37:56 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 15:37:56 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 15:37:56 DEBUG UpdateController:101 - /help
+2023-08-04 17:02:47 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 17:02:47 INFO  ThemesDAO:15 - Создал объект ThemesDao
+2023-08-04 17:02:48 INFO  TelegramBot:90 - TelegramAPI started. Look for messages
+2023-08-04 17:02:58 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:02:58 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:02:58 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:02:58 DEBUG UpdateController:101 - /theme
+2023-08-04 17:02:58 DEBUG UpdateController:137 - Вошёл в фукнцию choseAnekdot
+2023-08-04 17:03:04 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:04 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:03:04 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:03:04 DEBUG UpdateController:101 - /start
+2023-08-04 17:03:06 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:06 ERROR UpdateController:45 - Message is null
+2023-08-04 17:03:07 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:07 ERROR UpdateController:45 - Message is null
+2023-08-04 17:03:11 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:11 ERROR UpdateController:45 - Message is null
+2023-08-04 17:03:11 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:11 ERROR UpdateController:45 - Message is null
+2023-08-04 17:03:51 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 17:03:51 INFO  ThemesDAO:15 - Создал объект ThemesDao
+2023-08-04 17:03:52 INFO  TelegramBot:90 - TelegramAPI started. Look for messages
+2023-08-04 17:03:57 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:03:57 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:03:57 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:03:57 DEBUG UpdateController:101 - /theme
+2023-08-04 17:03:57 DEBUG UpdateController:137 - Вошёл в фукнцию choseAnekdot
+2023-08-04 17:07:48 INFO  AnekdotDAO:16 - Создал объект AnekdotDAO
+2023-08-04 17:07:48 INFO  ThemesDAO:15 - Создал объект ThemesDao
+2023-08-04 17:07:49 INFO  TelegramBot:90 - TelegramAPI started. Look for messages
+2023-08-04 17:07:58 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:07:58 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:07:58 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:07:58 DEBUG UpdateController:101 - /theme
+2023-08-04 17:07:58 DEBUG UpdateController:137 - Вошёл в фукнцию choseAnekdot
+2023-08-04 17:10:37 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:10:37 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:10:37 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:10:37 DEBUG UpdateController:101 - 23
+2023-08-04 17:10:37 DEBUG UpdateController:126 - Вошёл в функцию sendAnekdotText
+2023-08-04 17:10:37 DEBUG AnekdotDAO:21 - 23
+2023-08-04 17:12:34 DEBUG UpdateController:31 - Вошёл в функцкию processUpdate
+2023-08-04 17:12:34 DEBUG UpdateController:49 - Вошёл в функцкию distributeMessageByType
+2023-08-04 17:12:34 DEBUG UpdateController:98 - Вошёл в функцкию processTextMessage
+2023-08-04 17:12:34 DEBUG UpdateController:101 - /theme
+2023-08-04 17:12:34 DEBUG UpdateController:137 - Вошёл в фукнцию choseAnekdot
