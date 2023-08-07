@@ -6,13 +6,9 @@ import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import service.Buttons;
 import utils.MessageUtils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IllegalFormatConversionException;
 import java.util.LinkedHashMap;
 
 import static service.BotCommands.HELP_TEXT;
@@ -27,7 +23,9 @@ public class UpdateController  {
     private final int defaultState = 0;
     private final int chooseThemeState = 1;
     private final int chooseAnekdotState = 2;
+    private final int setAutoModeTimeState = 3;
     private int currentState = defaultState;
+    private boolean autoState = false;
     private LinkedHashMap<Integer,String> neededThemes;
     private String themesReplyMessage;
     public void registerBot(TelegramBot telegramBot){
@@ -110,14 +108,49 @@ public class UpdateController  {
             case "/theme":
                 chooseThemeLetter(update);
                 break;
+            case "/auto":
+                setAutoMod(update);
+                break;
             default:
                 if(currentState==chooseThemeState)
                     displayThemes(update,receivedMessageText);
                 else if (currentState==chooseAnekdotState)
                    sendAnekdotText(update,receivedMessageText);
-               else
+                else if (currentState== setAutoModeTimeState) {
+                     setAutoModeTime(update,receivedMessageText);
+
+                } else
                    log.debug("Была введна не команда,текст - " + receivedMessageText);
                break;
+        }
+    }
+    private void setAutoMod(Update update){
+        setView(update,"Выберите время,через которое бот будет присылать анекдот(в минутах)");
+        currentState = setAutoModeTimeState;
+        autoState = true;
+    }
+
+    private void setAutoModeTime(Update update, String receivedMessageText){
+        int receivedTime;
+        try {
+             receivedTime = Integer.parseInt(receivedMessageText);
+        }
+        catch (Exception e){
+            log.debug(e);
+            setView(update,"Введите корректный номер");
+            currentState = defaultState;
+            return;
+        }
+        chooseThemeLetter(update);
+        Long sleepTime = (long) receivedTime * 60000;
+        boolean flag = true;
+        while (flag){
+            try {
+                log.info("Вошёл в сон");
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     private void sendStartText(Update update){
@@ -177,6 +210,11 @@ public class UpdateController  {
                 neededThemes.put(key,value);
         });
         int count=1;
+        if(neededThemes.size()==0){
+            log.debug("Количество тем = 0");
+            setView(update,"К сожалению,таких тем нет");
+            return;
+        }
         for (Integer key: neededThemes.keySet()) {
             String themeText = count + ")" + neededThemes.get(key) + "\n";
             replyText +=themeText;

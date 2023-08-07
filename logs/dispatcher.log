@@ -1306,3 +1306,69 @@
 2023-08-07 17:10:07 INFO  ThemesDAO:17 - Создал объект ThemesDao
 2023-08-07 17:10:08 INFO  TelegramBot:93 - TelegramAPI started. Look for messages
 2023-08-07 17:10:08 ERROR TelegramBot:38 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [400] Bad Request: BOT_COMMAND_INVALID
+2023-08-07 17:40:00 INFO  AnekdotDAO:15 - Создал объект AnekdotDAO
+2023-08-07 17:40:00 INFO  ThemesDAO:17 - Создал объект ThemesDao
+2023-08-07 17:40:01 INFO  TelegramBot:91 - TelegramAPI started. Look for messages
+2023-08-07 17:40:01 ERROR TelegramBot:38 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [400] Bad Request: BOT_COMMAND_INVALID
+2023-08-07 17:40:01 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:40:01 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:40:01 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:40:01 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:40:01 DEBUG UpdateController:99 - /theme
+2023-08-07 17:40:01 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:40:01 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:40:01 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:40:01 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:40:01 DEBUG UpdateController:99 - /help
+2023-08-07 17:40:07 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:40:07 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:40:07 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:40:07 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:40:07 DEBUG UpdateController:99 - /auto
+2023-08-07 17:40:10 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:40:10 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:40:10 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:40:10 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:40:10 DEBUG UpdateController:99 - 1
+2023-08-07 17:42:55 INFO  AnekdotDAO:15 - Создал объект AnekdotDAO
+2023-08-07 17:42:55 INFO  ThemesDAO:17 - Создал объект ThemesDao
+2023-08-07 17:42:56 INFO  TelegramBot:91 - TelegramAPI started. Look for messages
+2023-08-07 17:42:56 ERROR TelegramBot:38 - Error executing org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands query: [400] Bad Request: BOT_COMMAND_INVALID
+2023-08-07 17:42:56 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:42:56 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:42:56 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:42:56 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:42:56 DEBUG UpdateController:99 - /theme
+2023-08-07 17:43:03 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:43:03 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:43:03 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:43:03 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:43:03 DEBUG UpdateController:99 - а
+2023-08-07 17:43:03 DEBUG UpdateController:196 - Вошёл в фукнцию displayThemes
+2023-08-07 17:43:03 DEBUG UpdateController:221 - Выберите тему анекдота:
+1)Анекдоты про авиацию и самолёты
+2)Анекдоты про автомобили и автомобилистов
+3)Анекдоты про автобус
+4)Анекдоты про аптеку и аптекарей
+5)Анекдоты про армию
+6)Анекдоты про армянское радио
+
+2023-08-07 17:43:06 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:43:06 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:43:06 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:43:06 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:43:06 DEBUG UpdateController:99 - 4
+2023-08-07 17:43:06 DEBUG UpdateController:160 - Вошёл в функцию sendAnekdotText
+2023-08-07 17:43:06 DEBUG UpdateController:182 - Id темы - Анекдоты про аптеку и аптекарей
+2023-08-07 17:43:06 DEBUG AnekdotDAO:21 - SELECT text FROM anekdot_store WHERE theme_id=13 LIMIT 1
+2023-08-07 17:43:14 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:43:14 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:43:14 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:43:14 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:43:14 DEBUG UpdateController:99 - /auto
+2023-08-07 17:43:17 DEBUG TelegramBot:67 - Вошёл в функцию onUpdateReceived
+2023-08-07 17:43:17 DEBUG UpdateController:34 - Вошёл в функцкию processUpdate
+2023-08-07 17:43:17 DEBUG UpdateController:52 - Вошёл в функцкию distributeMessageByType
+2023-08-07 17:43:17 DEBUG UpdateController:96 - Вошёл в функцкию processTextMessage
+2023-08-07 17:43:17 DEBUG UpdateController:99 - 1
+2023-08-07 17:43:17 INFO  UpdateController:147 - Вошёл в сон
