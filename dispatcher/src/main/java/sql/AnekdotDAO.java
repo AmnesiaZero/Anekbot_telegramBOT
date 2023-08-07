@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 @Log4j
 @Data
@@ -16,11 +15,12 @@ public class AnekdotDAO {
              log.info("Создал объект AnekdotDAO");
               this.dataSource = dataSource;
     }
-    public String getAnekdot(String themeId) throws SQLException {
+    public String getAnekdot(int themeId) throws SQLException {
         Statement statement = dataSource.connection.createStatement();
-        log.debug(themeId);
-        ResultSet resultSet = statement.executeQuery("SELECT text FROM anekdot_store WHERE theme_id="+ themeId +"LIMIT 1");
-        String anekdotText = SqlConverter.convertSqlToString(resultSet);
+        String sqlQuery = "SELECT text FROM anekdot_store WHERE theme_id="+ themeId +" LIMIT 1";
+        log.debug(sqlQuery);
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        String anekdotText = SqlConverter.convertSqlQueryToString(resultSet);
         return anekdotText;
     }
 

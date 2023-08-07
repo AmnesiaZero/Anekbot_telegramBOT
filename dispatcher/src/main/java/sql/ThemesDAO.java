@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @Log4j
 @Data
@@ -15,10 +17,11 @@ public class ThemesDAO {
         log.info("Создал объект ThemesDao");
         this.dataSource = dataSource;
     }
-    public ArrayList<String> getThemes(String receivedMessageText) throws SQLException {
+    public LinkedHashMap<Integer,String> getThemes() throws SQLException {
         Statement statement = dataSource.connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT theme FROM anekdot_themes ORDER BY id ASC");
-        ArrayList<String> themes = SqlConverter.convertSqlQueryToStringArrayList(resultSet,"theme");
+        ResultSet resultSet = statement.executeQuery("SELECT id,theme FROM anekdot_themes ORDER BY id ASC");
+        LinkedHashMap<Integer,String> themes = SqlConverter.convertSqlQueryToHashMap(resultSet,"theme");
+//        ArrayList<String> themes = SqlConverter.convertSqlQueryToStringArrayList(resultSet,"theme");
         return themes;
     }
 

@@ -1,21 +1,31 @@
 package sql;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class SqlConverter {
-    public static String convertSqlToString(ResultSet resultSet) throws SQLException {
+    public static String convertSqlQueryToString(ResultSet resultSet) throws SQLException {
         resultSet.next();
         return resultSet.getString(1);
     }
     public static ArrayList<String> convertSqlQueryToStringArrayList(ResultSet resultSet,String columnLabel) throws SQLException{
-        ArrayList<String> themes = new ArrayList<>();
+        ArrayList<String> stringArrayList = new ArrayList<>();
         while (resultSet.next()){
-            String theme = resultSet.getString(columnLabel);
-            themes.add(theme);
+            String string = resultSet.getString(columnLabel);
+            stringArrayList.add(string);
         }
-        return themes;
+        return stringArrayList;
+    }
+    public static LinkedHashMap<Integer,String> convertSqlQueryToHashMap(ResultSet resultSet, String columnLabel) throws SQLException {
+        LinkedHashMap<Integer,String> hashMap = new LinkedHashMap<>();
+        while (resultSet.next()){
+            int integer = resultSet.getInt("id");
+            String string = resultSet.getString(columnLabel);
+            hashMap.put(integer,string);
+        }
+        return hashMap;
     }
 }

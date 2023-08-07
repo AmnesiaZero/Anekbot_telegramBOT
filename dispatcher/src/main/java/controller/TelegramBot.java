@@ -64,6 +64,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
 
     @Override
     public void onUpdateReceived(@NotNull Update update) {
+        log.debug("Вошёл в функцию onUpdateReceived");
         try {
             updateController.processUpdate(update);
         } catch (SQLException e) {
@@ -78,8 +79,12 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
             }
             catch (TelegramApiException e){
                 log.error(e);
+                SendMessage sendMessage = new SendMessage();
+
             }
         }
+        else
+            log.error("Отправленное сообщение - null");
     }
     public void botConnect() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
