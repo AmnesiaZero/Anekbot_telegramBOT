@@ -1,8 +1,8 @@
 # Anekbot
-Technology stack:
-1)Java(Vanila)
-2)TelegramLongPolling
-3)Maven
+Technology stack:<br />
+1)Java(Vanila)<br />
+2)TelegramLongPolling<br />
+3)Maven<br />
 4)MySQL
 - [x] Add basic functions
 - [ ] Host on server
