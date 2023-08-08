@@ -11,6 +11,7 @@ Technology stack:<br />
 - [ ] Add inline buttons
 - [ ] Add multi-threads
 - [ ] Add function to send anekdot once in selected period of time
+- [ ] Add rabitMQ 
 - [ ] Refactor for Spring Boot and Webhooks
 - [ ] Launch final version
 
