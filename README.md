@@ -6,12 +6,13 @@ Technology stack:<br />
 4)MySQL
 - [x] Add basic functions
 - [ ] Host on server
-- [x] Parse data to MySQL DB
+- [x] Parse data to MySQL DB(100k rows)
 - [x] Add filter by themes letter
 - [ ] Add inline buttons
 - [ ] Add multi-threads
 - [ ] Add function to send anekdot once in selected period of time
-- [ ] Add rabitMQ 
+- [ ] Add rabitMQ
+- [ ] Add higher quality anekdots
 - [ ] Refactor for Spring Boot and Webhooks
 - [ ] Launch final version
 
