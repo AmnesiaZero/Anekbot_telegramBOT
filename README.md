@@ -11,6 +11,7 @@ Technology stack:
 - [ ] Add inline buttons
 - [ ] Add multi-threads
 - [ ] Add function to send anekdot once in selected period of time
+- [ ] Refactor for Spring Boot and Webhooks
 - [ ] Launch final version
 
 
