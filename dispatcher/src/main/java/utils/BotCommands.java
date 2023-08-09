@@ -1,4 +1,4 @@
-package service;
+package utils;
 
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 

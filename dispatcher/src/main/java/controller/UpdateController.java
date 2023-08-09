@@ -11,7 +11,7 @@ import utils.MessageUtils;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
-import static service.BotCommands.HELP_TEXT;
+import static utils.BotCommands.HELP_TEXT;
 
 
 @Log4j
@@ -62,35 +62,33 @@ public class UpdateController  {
         else{
             setUnsupportedMessageTypeView(update);
         }
-
-
+    }
+    private void addTextMessageToQueue(Update update, String messageText) {
+        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,messageText);
+        telegramBot.getSendQueue().offer(sendMessage);
     }
 
     private void setUnsupportedMessageTypeView(Update update) {
         var recievedMessage = update.getMessage();
         log.info("Получено неподдерживаемое сообщение");
         log.info(recievedMessage.getText());
-        setView(update,"Скинь что-то более понятное");
+        addTextMessageToQueue(update,"Скинь что-то более понятное");
     }
 
-    private void setView(Update update,String messageText) {
-        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,messageText);
-//        sendMessage.setReplyMarkup(Buttons.inlineMarkup());
-        telegramBot.sendAnswerMessage(sendMessage);
-    }
+
 
     private void processPhotoMessage(Update update) {
         Message recievedMessage = update.getMessage();
         log.info("Получено фото");
         log.info(recievedMessage.getText());
-        setView(update,"Спасибо за фото,хочешь анекдот?");
+        addTextMessageToQueue(update,"Спасибо за фото,хочешь анекдот?");
     }
 
     private void processDocumentMessage(Update update) {
         Message recievedMessage = update.getMessage();
         log.info("Получен документ");
         log.info(recievedMessage.getText());
-        setView(update,"зачем мне документ............");
+        addTextMessageToQueue(update,"зачем мне документ............");
     }
 
     private void processTextMessage(Update update) throws SQLException {
@@ -125,7 +123,7 @@ public class UpdateController  {
         }
     }
     private void setAutoMod(Update update){
-        setView(update,"Выберите время,через которое бот будет присылать анекдот(в минутах)");
+        addTextMessageToQueue(update,"Выберите время,через которое бот будет присылать анекдот(в минутах)");
         currentState = setAutoModeTimeState;
         autoState = true;
     }
@@ -137,7 +135,7 @@ public class UpdateController  {
         }
         catch (Exception e){
             log.debug(e);
-            setView(update,"Введите корректный номер");
+            addTextMessageToQueue(update,"Введите корректный номер");
             currentState = defaultState;
             return;
         }
@@ -155,7 +153,7 @@ public class UpdateController  {
     }
     private void sendStartText(Update update){
         String userName = update.getMessage().getFrom().getUserName();
-        setView(update,"Привет," + userName + "!Хочешь анекдотов?");
+        addTextMessageToQueue(update,"Привет," + userName + "!Хочешь анекдотов?");
     }
 
     private void sendAnekdotText(Update update, String receivedMessageText) throws SQLException {
@@ -166,13 +164,13 @@ public class UpdateController  {
         }
         catch (Exception e){
             log.debug(e);
-            setView(update,"Введите корректный номер");
+            addTextMessageToQueue(update,"Введите корректный номер");
             currentState = defaultState;
             return;
         }
         if(neededThemes==null){
             log.error("Нет списка нужных тем");
-            setView(update,"Ошибка:нет нужных тем");
+            addTextMessageToQueue(update,"Ошибка:нет нужных тем");
             currentState = defaultState;
             return;
         }
@@ -184,20 +182,20 @@ public class UpdateController  {
         log.debug("Id темы - " +neededThemes.values().toArray()[chosenThemeId-1]);
         int themeId =(int)neededThemes.keySet().toArray()[chosenThemeId-1];//получение id темы из выбранного номера
         String anekdotText = telegramBot.getSqlController().getAnekdotDAO().getAnekdot(themeId);
-        setView(update,anekdotText);
+        addTextMessageToQueue(update,anekdotText);
         currentState = defaultState;
     }
     private void sendHelpText(Update update){
-        setView(update,HELP_TEXT);;
+        addTextMessageToQueue(update,HELP_TEXT);;
     }
     private void chooseThemeLetter(Update update){
-        setView(update,"Выберите первую букву темы");
+        addTextMessageToQueue(update,"Выберите первую букву темы");
         currentState = chooseThemeState;
     }
     private void displayThemes(Update update, String receivedMessageText) throws SQLException {
         log.debug("Вошёл в фукнцию displayThemes");
         if(receivedMessageText.length()>1){
-            setView(update,"Пожалуйста,введите 1 символ");
+            addTextMessageToQueue(update,"Пожалуйста,введите 1 символ");
             return;
         }
         char themeLetter = receivedMessageText.charAt(0);
@@ -212,7 +210,7 @@ public class UpdateController  {
         int count=1;
         if(neededThemes.size()==0){
             log.debug("Количество тем = 0");
-            setView(update,"К сожалению,таких тем нет");
+            addTextMessageToQueue(update,"К сожалению,таких тем нет");
             return;
         }
         for (Integer key: neededThemes.keySet()) {
@@ -221,7 +219,7 @@ public class UpdateController  {
             count++;
         }
         log.debug(replyText);
-        setView(update,replyText);
+        addTextMessageToQueue(update,replyText);
         currentState = chooseAnekdotState;
     }
 }

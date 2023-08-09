@@ -12,11 +12,12 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import service.BotCommands;
+import utils.BotCommands;
 import sql.AnekdotDAO;
 import sql.DataSource;
 import sql.ThemesDAO;
 import java.sql.SQLException;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Log4j
 @Data
@@ -25,6 +26,8 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     final BotConfig config;
     private UpdateController updateController;
     private SqlController sqlController;
+    private LinkedBlockingQueue<Update> receiveQueue;
+    private LinkedBlockingQueue<SendMessage> sendQueue;
 
     public TelegramBot() throws SQLException, TelegramApiException {
         this.config = new BotConfig();
@@ -37,6 +40,8 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         } catch (TelegramApiException e){
             log.error(e.getMessage());
         }
+        receiveQueue = new LinkedBlockingQueue<>();
+        sendQueue = new LinkedBlockingQueue<>();
     }
     private void loadSqlController(DataSource dataSource) throws SQLException {
         sqlController = new SqlController();
@@ -44,11 +49,6 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         sqlController.setThemesDAO(new ThemesDAO(dataSource));
     }
 
-
-//    @PostConstruct
-//    public void init(){
-//        updateController.registerBot(this);
-//    }
 
 
     @Override
@@ -65,11 +65,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     @Override
     public void onUpdateReceived(@NotNull Update update) {
         log.debug("Вошёл в функцию onUpdateReceived");
-        try {
-            updateController.processUpdate(update);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        receiveQueue.offer(update);
     }
 
     public void sendAnswerMessage(SendMessage message) {
