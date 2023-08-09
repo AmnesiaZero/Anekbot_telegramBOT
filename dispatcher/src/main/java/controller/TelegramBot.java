@@ -1,12 +1,16 @@
 package controller;
 import config.BotConfig;
 import jakarta.validation.constraints.NotNull;
+import javafx.util.Pair;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -17,6 +21,9 @@ import sql.AnekdotDAO;
 import sql.DataSource;
 import sql.ThemesDAO;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Log4j
@@ -28,11 +35,13 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     private SqlController sqlController;
     private MessageReceiver messageReceiver;
     private MessageSender messageSender;
+//    private LinkedBlockingQueue<Update> receiveQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<Update> receiveQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<SendMessage> sendQueue = new LinkedBlockingQueue<>();
     public TelegramBot() throws SQLException, TelegramApiException {
         this.config = new BotConfig();
         this.updateController = new UpdateController();
+        this.execute(new SetMyCommands(LIST_OF_COMMANDS,new BotCommandScopeDefault(),null));
         DataSource dataSource = new DataSource();
         loadSqlController(dataSource);
         botConnect();
@@ -47,11 +56,6 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         this.messageSender = messageSender;
     }
 
-
-//    @PostConstruct
-//    public void init(){
-//        updateController.registerBot(this);
-//    }
 
 
     @Override
@@ -68,12 +72,11 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     @Override
     public void onUpdateReceived(@NotNull Update update) {
         log.debug(update);
-        if(getReceiveQueue().offer(update)){
+        if(receiveQueue.offer(update)){
             log.debug("Update успешно добавлен");
         }
         else
            log.error("Объект не был добавлен");
-
     }
 
     public void sendAnswerMessage(SendMessage message) {

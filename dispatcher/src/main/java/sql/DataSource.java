@@ -1,15 +1,16 @@
 package sql;
+import lombok.Data;
 import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
 @Log4j
+@Data
 public class DataSource {
     static String url ;
 

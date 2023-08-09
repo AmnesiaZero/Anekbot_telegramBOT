@@ -19,10 +19,6 @@ public class MessageSender implements Runnable {
     public MessageSender(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
     }
-    public void addTextMessageToSendQue(Update update, String text) {
-        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,text);
-        telegramBot.getSendQueue().offer(sendMessage);
-    }
     @Override
     public void run() {
         log.debug("Запустилась функция run у MessageSender");
@@ -32,10 +28,6 @@ public class MessageSender implements Runnable {
                 log.debug("Вызвана отправка сообщения");
                 telegramBot.sendAnswerMessage(sendMessage);
             }
-    }
-    //заготовка на будущее
-    private void distributeSendMessageByType(SendMessage sendMessage){
-
     }
 
 }

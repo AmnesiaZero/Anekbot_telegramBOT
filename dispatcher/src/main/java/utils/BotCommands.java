@@ -9,7 +9,7 @@ public interface BotCommands {
             new BotCommand("/start", "start bot"),
             new BotCommand("/help", "bot info"),
             new BotCommand("/theme", "chose bot theme"),
-            new BotCommand("/setAuto","set auto-anekot sender")
+            new BotCommand("/auto","set auto mode")
     );
 
     String HELP_TEXT = "Привет,это бот с анекдотами. Я помогу выбрать тебе подходящий тебе по теме анекдот.Команды:" +

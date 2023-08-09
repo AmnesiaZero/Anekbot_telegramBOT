@@ -3,7 +3,6 @@ package sql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class SqlConverter {
@@ -27,5 +26,9 @@ public class SqlConverter {
             hashMap.put(integer,string);
         }
         return hashMap;
+    }
+    public static int convertSqlQueryToInt(ResultSet resultSet, String botState) throws SQLException {
+        resultSet.next();
+        return resultSet.getInt(botState);
     }
 }
