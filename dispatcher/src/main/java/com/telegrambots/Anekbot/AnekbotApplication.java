@@ -15,13 +15,16 @@ public class AnekbotApplication {
 		telegramBot.getUpdateController().registerBot(telegramBot);
 		MessageReceiver messageReceiver = new MessageReceiver(telegramBot);
 		MessageSender messageSender = new MessageSender(telegramBot);
-		Thread receiveThread = new Thread(messageReceiver);
-		receiveThread.setDaemon(true);
-		receiveThread.setName("receiveThread");
-		receiveThread.start();
-		Thread sendThread = new Thread(messageSender);
-		sendThread.setDaemon(true);
-		sendThread.setName("sendThread");
-		sendThread.start();
+		telegramBot.loadMessageHandlers(messageReceiver,messageSender);
+		Thread receiver = new Thread(messageReceiver);
+		receiver.setDaemon(true);
+		receiver.setName("MsgReciever");
+		receiver.start();
+
+		Thread sender = new Thread(messageSender);
+		sender.setDaemon(true);
+		sender.setName("MsgSender");
+		sender.start();
+
 	}
 }

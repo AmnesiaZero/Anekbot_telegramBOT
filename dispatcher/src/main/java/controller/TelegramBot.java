@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import service.MessageReceiver;
+import service.MessageSender;
 import utils.BotCommands;
 import sql.AnekdotDAO;
 import sql.DataSource;
@@ -26,29 +26,32 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
     final BotConfig config;
     private UpdateController updateController;
     private SqlController sqlController;
-    private LinkedBlockingQueue<Update> receiveQueue;
-    private LinkedBlockingQueue<SendMessage> sendQueue;
-
+    private MessageReceiver messageReceiver;
+    private MessageSender messageSender;
+    private LinkedBlockingQueue<Update> receiveQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<SendMessage> sendQueue = new LinkedBlockingQueue<>();
     public TelegramBot() throws SQLException, TelegramApiException {
         this.config = new BotConfig();
         this.updateController = new UpdateController();
         DataSource dataSource = new DataSource();
         loadSqlController(dataSource);
         botConnect();
-        try {
-            this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e){
-            log.error(e.getMessage());
-        }
-        receiveQueue = new LinkedBlockingQueue<>();
-        sendQueue = new LinkedBlockingQueue<>();
     }
     private void loadSqlController(DataSource dataSource) throws SQLException {
         sqlController = new SqlController();
         sqlController.setAnekdotDAO(new AnekdotDAO(dataSource));
         sqlController.setThemesDAO(new ThemesDAO(dataSource));
     }
+    public void loadMessageHandlers(MessageReceiver messageReceiver,MessageSender messageSender){
+        this.messageReceiver = messageReceiver;
+        this.messageSender = messageSender;
+    }
 
+
+//    @PostConstruct
+//    public void init(){
+//        updateController.registerBot(this);
+//    }
 
 
     @Override
@@ -64,8 +67,13 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
 
     @Override
     public void onUpdateReceived(@NotNull Update update) {
-        log.debug("Вошёл в функцию onUpdateReceived");
-        receiveQueue.offer(update);
+        log.debug(update);
+        if(getReceiveQueue().offer(update)){
+            log.debug("Update успешно добавлен");
+        }
+        else
+           log.error("Объект не был добавлен");
+
     }
 
     public void sendAnswerMessage(SendMessage message) {
@@ -77,8 +85,6 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
                 log.error(e);
             }
         }
-        else
-            log.error("Отправленное сообщение - null");
     }
     public void botConnect() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);

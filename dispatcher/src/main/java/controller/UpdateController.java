@@ -27,23 +27,13 @@ public class UpdateController  {
     private int currentState = defaultState;
     private boolean autoState = false;
     private LinkedHashMap<Integer,String> neededThemes;
-    private String themesReplyMessage;
     public void registerBot(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
     }
-    public void processUpdate(@NotNull Update update) throws SQLException {
+    public void processUpdate(Update update) throws SQLException {
         log.debug("Вошёл в функцкию processUpdate");
         if(update.getMessage()!=null) {
-            if (update.getMessage().getChatId() != null)
-                 chatId = update.getMessage().getChatId();
-             else
-                 log.error("Чат id не найден");
-            if (update.getMessage().getFrom().getUserName() != null)
-                userName = update.getMessage().getFrom().getUserName();
-             else
-                 log.error("Username не найден");
-
-            distributeMessageByType(update);
+             distributeMessageByType(update);
         }
         else
             log.error("Message is null");
@@ -62,17 +52,15 @@ public class UpdateController  {
         else{
             setUnsupportedMessageTypeView(update);
         }
-    }
-    private void addTextMessageToQueue(Update update, String messageText) {
-        SendMessage sendMessage = MessageUtils.generateSendMessageWithText(update,messageText);
-        telegramBot.getSendQueue().offer(sendMessage);
+
+
     }
 
     private void setUnsupportedMessageTypeView(Update update) {
         var recievedMessage = update.getMessage();
         log.info("Получено неподдерживаемое сообщение");
         log.info(recievedMessage.getText());
-        addTextMessageToQueue(update,"Скинь что-то более понятное");
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,"Скинь что-то более понятное");
     }
 
 
@@ -81,14 +69,14 @@ public class UpdateController  {
         Message recievedMessage = update.getMessage();
         log.info("Получено фото");
         log.info(recievedMessage.getText());
-        addTextMessageToQueue(update,"Спасибо за фото,хочешь анекдот?");
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,"Спасибо за фото,хочешь анекдот?");
     }
 
     private void processDocumentMessage(Update update) {
         Message recievedMessage = update.getMessage();
         log.info("Получен документ");
         log.info(recievedMessage.getText());
-        addTextMessageToQueue(update,"зачем мне документ............");
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,"зачем мне документ............");
     }
 
     private void processTextMessage(Update update) throws SQLException {
@@ -122,9 +110,16 @@ public class UpdateController  {
                break;
         }
     }
+    private void sendHelpText(Update update){
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,HELP_TEXT);;
+    }
+    private void sendStartText(Update update){
+        String userName = update.getMessage().getFrom().getUserName();
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,"Привет," + userName + "!Хочешь анекдотов?");
+    }
     private void setAutoMod(Update update){
-        addTextMessageToQueue(update,"Выберите время,через которое бот будет присылать анекдот(в минутах)");
-        currentState = setAutoModeTimeState;
+        log.debug("Был включён автомод");
+        chooseThemeLetter(update);
         autoState = true;
     }
 
@@ -135,67 +130,34 @@ public class UpdateController  {
         }
         catch (Exception e){
             log.debug(e);
-            addTextMessageToQueue(update,"Введите корректный номер");
+            telegramBot.getMessageSender().addTextMessageToSendQue(update,"Введите корректный номер");
             currentState = defaultState;
             return;
         }
-        chooseThemeLetter(update);
-        Long sleepTime = (long) receivedTime * 60000;
-        boolean flag = true;
-        while (flag){
-            try {
-                log.info("Вошёл в сон");
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-    private void sendStartText(Update update){
-        String userName = update.getMessage().getFrom().getUserName();
-        addTextMessageToQueue(update,"Привет," + userName + "!Хочешь анекдотов?");
-    }
 
-    private void sendAnekdotText(Update update, String receivedMessageText) throws SQLException {
-        log.debug("Вошёл в функцию sendAnekdotText");
-        int chosenThemeId;
-        try{
-            chosenThemeId = Integer.parseInt(receivedMessageText);
-        }
-        catch (Exception e){
-            log.debug(e);
-            addTextMessageToQueue(update,"Введите корректный номер");
-            currentState = defaultState;
-            return;
-        }
-        if(neededThemes==null){
-            log.error("Нет списка нужных тем");
-            addTextMessageToQueue(update,"Ошибка:нет нужных тем");
-            currentState = defaultState;
-            return;
-        }
-        if(chosenThemeId>neededThemes.size()){
-            log.debug("Выбрана тема больше максимальной");
-            currentState = defaultState;
-            return;
-        }
-        log.debug("Id темы - " +neededThemes.values().toArray()[chosenThemeId-1]);
-        int themeId =(int)neededThemes.keySet().toArray()[chosenThemeId-1];//получение id темы из выбранного номера
-        String anekdotText = telegramBot.getSqlController().getAnekdotDAO().getAnekdot(themeId);
-        addTextMessageToQueue(update,anekdotText);
-        currentState = defaultState;
+
     }
-    private void sendHelpText(Update update){
-        addTextMessageToQueue(update,HELP_TEXT);;
+    private void runAutoMode(Update update){
+//        Long sleepTime = (long) receivedTime * 60000;
+//        boolean flag = true;
+//        while (flag){
+//            try {
+//                log.info("Вошёл в сон");
+//                Thread.sleep(sleepTime);
+//            } catch (InterruptedException e1) {
+//                e1.printStackTrace();
+//            }
+//        }
+
     }
     private void chooseThemeLetter(Update update){
-        addTextMessageToQueue(update,"Выберите первую букву темы");
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,"Выберите первую букву темы");
         currentState = chooseThemeState;
     }
     private void displayThemes(Update update, String receivedMessageText) throws SQLException {
         log.debug("Вошёл в фукнцию displayThemes");
         if(receivedMessageText.length()>1){
-            addTextMessageToQueue(update,"Пожалуйста,введите 1 символ");
+            telegramBot.getMessageSender().addTextMessageToSendQue(update,"Пожалуйста,введите 1 символ");
             return;
         }
         char themeLetter = receivedMessageText.charAt(0);
@@ -210,7 +172,7 @@ public class UpdateController  {
         int count=1;
         if(neededThemes.size()==0){
             log.debug("Количество тем = 0");
-            addTextMessageToQueue(update,"К сожалению,таких тем нет");
+            telegramBot.getMessageSender().addTextMessageToSendQue(update,"К сожалению,таких тем нет");
             return;
         }
         for (Integer key: neededThemes.keySet()) {
@@ -219,7 +181,49 @@ public class UpdateController  {
             count++;
         }
         log.debug(replyText);
-        addTextMessageToQueue(update,replyText);
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,replyText);
         currentState = chooseAnekdotState;
     }
+
+    private void sendAnekdotText(Update update, String receivedMessageText) throws SQLException {
+        log.debug("Вошёл в функцию sendAnekdotText");
+        int chosenThemeId;
+        try{
+            chosenThemeId = Integer.parseInt(receivedMessageText);
+        }
+        catch (Exception e){
+            log.debug(e);
+            telegramBot.getMessageSender().addTextMessageToSendQue(update,"Введите корректный номер");
+            currentState = defaultState;
+            return;
+        }
+        if(neededThemes==null){
+            log.error("Нет списка нужных тем");
+            telegramBot.getMessageSender().addTextMessageToSendQue(update,"Ошибка:нет нужных тем");
+            currentState = defaultState;
+            return;
+        }
+        if(chosenThemeId>neededThemes.size()){
+            log.debug("Выбрана тема больше максимальной");
+            currentState = defaultState;
+            return;
+        }
+        log.debug("Id темы - " +neededThemes.values().toArray()[chosenThemeId-1]);
+        int themeId =(int)neededThemes.keySet().toArray()[chosenThemeId-1];//получение id темы из выбранного номера
+        if(autoState){
+            while (autoState){
+                displayAnekdot(update,themeId);
+            }
+        }
+        else
+            displayAnekdot(update,themeId);
+        currentState = defaultState;
+    }
+    private void displayAnekdot(Update update,int themeId) throws SQLException {
+        String anekdotText = telegramBot.getSqlController().getAnekdotDAO().getAnekdot(themeId);
+        telegramBot.getMessageSender().addTextMessageToSendQue(update,anekdotText);
+    }
+
+
+
 }

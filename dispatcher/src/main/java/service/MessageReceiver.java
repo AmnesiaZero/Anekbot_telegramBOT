@@ -1,4 +1,3 @@
-
 package service;
 
 import controller.TelegramBot;
@@ -11,21 +10,26 @@ import java.sql.SQLException;
 
 @Log4j
 @Data
-public class MessageReceiver implements Runnable{
+public class MessageReceiver implements Runnable {
+    private boolean runningFlag = true;
     private TelegramBot telegramBot;
+
+    public MessageReceiver(TelegramBot telegramBot){
+        this.telegramBot = telegramBot;
+    }
     @Override
     public void run() {
-        while (true){
+        log.debug("Запустилась очередь приема сообщений");
+        log.debug("Очередь приёма - " + telegramBot.getReceiveQueue());
+        while (runningFlag){
             Update update = telegramBot.getReceiveQueue().poll();
             if(update==null) continue;
+            log.debug("Update обработан");
             try {
                 telegramBot.getUpdateController().processUpdate(update);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-    }
-    public MessageReceiver(TelegramBot telegramBot){
-        this.telegramBot = telegramBot;
     }
 }
