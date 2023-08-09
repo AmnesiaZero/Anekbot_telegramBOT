@@ -13,7 +13,7 @@ public class GenericButtons {
     public static InlineKeyboardMarkup inlineMarkup() {
         START_BUTTON.setCallbackData("/start");
         HELP_BUTTON.setCallbackData("/help");
-        THEME_BUTTON.setCallbackData("/themeLetter");
+        THEME_BUTTON.setCallbackData("/theme");
         List<InlineKeyboardButton> rowInline = List.of(START_BUTTON, HELP_BUTTON,THEME_BUTTON);
         List<List<InlineKeyboardButton>> rowsInLine = List.of(rowInline);
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

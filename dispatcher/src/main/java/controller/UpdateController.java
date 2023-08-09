@@ -18,7 +18,6 @@ import static utils.BotCommands.HELP_TEXT;
 @Data
 public class UpdateController  {
     private TelegramBot telegramBot;
-    private Long chatId;
     private final int defaultState = 0;
     private final int chooseThemeState = 1;
     private final int chooseAnekdotState = 2;
@@ -30,10 +29,8 @@ public class UpdateController  {
     }
     public void processUpdate(Update update) throws SQLException {
         log.debug("Вошёл в функцкию processUpdate");
-//        if(update.getMessage()!=null)
-//             distributeMessageByType(update);
-//        else if(update.getCallbackQuery().getMessage()!=null)
-//            processCallbackQueryTextMessage(update);
+        if(!telegramBot.getSqlController().getBotStateDAO().chatIdExist(MessageUtils.getChatId(update)))
+           setBotState(update,defaultState);
         distributeMessageByType(update);
     }
 

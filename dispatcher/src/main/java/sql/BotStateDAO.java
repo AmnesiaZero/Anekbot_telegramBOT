@@ -11,6 +11,10 @@ import java.sql.Statement;
 @Data
 public class BotStateDAO {
     private DataSource dataSource;
+    public BotStateDAO(DataSource dataSource){
+        log.debug("Создан объект BotStateDAO");
+        this.dataSource = dataSource;
+    }
     public int getBotState(Long chatId) throws SQLException {
         Statement statement = dataSource.getConnection().createStatement();
         String sqlQuery = "SELECT bot_state FROM bot_state_store WHERE chat_id = " + chatId;
@@ -28,7 +32,7 @@ public class BotStateDAO {
         else
             sqlQuery = "INSERT INTO `bot_state_store`(`id`,`chat_id`, `bot_state`) VALUES (NULL," + chatId +"," + botState + ")";
         log.debug(sqlQuery);
-        statement.executeQuery(sqlQuery);
+        statement.execute(sqlQuery);
     }
     public boolean chatIdExist(Long chatId) throws SQLException {
         Statement statement = dataSource.getConnection().createStatement();
@@ -36,7 +40,6 @@ public class BotStateDAO {
         ResultSet resultSet = statement.executeQuery(sqlQuery);
         if(resultSet.next()) return true;
         else return false;
-
     }
 
 

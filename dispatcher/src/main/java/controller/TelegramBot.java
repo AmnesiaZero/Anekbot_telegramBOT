@@ -43,14 +43,10 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
         this.updateController = new UpdateController();
         this.execute(new SetMyCommands(LIST_OF_COMMANDS,new BotCommandScopeDefault(),null));
         DataSource dataSource = new DataSource();
-        loadSqlController(dataSource);
+        this.sqlController = new SqlController(dataSource);
         botConnect();
     }
-    private void loadSqlController(DataSource dataSource) throws SQLException {
-        sqlController = new SqlController();
-        sqlController.setAnekdotDAO(new AnekdotDAO(dataSource));
-        sqlController.setThemesDAO(new ThemesDAO(dataSource));
-    }
+
     public void loadMessageHandlers(MessageReceiver messageReceiver,MessageSender messageSender){
         this.messageReceiver = messageReceiver;
         this.messageSender = messageSender;
