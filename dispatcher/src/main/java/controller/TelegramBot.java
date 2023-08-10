@@ -1,7 +1,6 @@
 package controller;
 import config.BotConfig;
 import jakarta.validation.constraints.NotNull;
-import javafx.util.Pair;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -9,21 +8,16 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import service.MessageReceiver;
 import service.MessageSender;
-import utils.BotCommands;
-import sql.AnekdotDAO;
+import Buttons.BotCommands;
 import sql.DataSource;
-import sql.ThemesDAO;
+
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Log4j
@@ -38,6 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotCommands {
 //    private LinkedBlockingQueue<Update> receiveQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<Update> receiveQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<SendMessage> sendQueue = new LinkedBlockingQueue<>();
+//    private int botState = 0;
     public TelegramBot() throws SQLException, TelegramApiException {
         this.config = new BotConfig();
         this.updateController = new UpdateController();

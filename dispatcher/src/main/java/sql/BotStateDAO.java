@@ -26,9 +26,8 @@ public class BotStateDAO {
     public void setBotState(Long chatId,int botState) throws SQLException {
         Statement statement = dataSource.getConnection().createStatement();
         String sqlQuery;
-        if(chatIdExist(chatId)){
+        if(chatIdExist(chatId))
             sqlQuery = "UPDATE `bot_state_store` SET `bot_state`="+botState +" WHERE `chat_id`="+ chatId;
-        }
         else
             sqlQuery = "INSERT INTO `bot_state_store`(`id`,`chat_id`, `bot_state`) VALUES (NULL," + chatId +"," + botState + ")";
         log.debug(sqlQuery);
@@ -41,6 +40,22 @@ public class BotStateDAO {
         if(resultSet.next()) return true;
         else return false;
     }
+    public char getChosenLetter(Long chatId) throws SQLException{
+        Statement statement = dataSource.getConnection().createStatement();
+        String sqlQuery = "SELECT chosen_letter FROM bot_state_store WHERE chat_id = " + chatId;
+        log.debug(sqlQuery);
+        ResultSet resultSet = statement.executeQuery(sqlQuery);
+        char chosenLetter = SqlConverter.convertSqlToChar(resultSet,"chosen_letter");
+        log.debug("Получена буква - " + chosenLetter );
+        return chosenLetter;
+    }
+    public void setChosenLetter(Long chatId,char letter) throws SQLException {
+        Statement statement = dataSource.getConnection().createStatement();
+        String sqlQuery = "UPDATE `bot_state_store` SET `chosen_letter`='"+letter +"' WHERE `chat_id`="+ chatId;
+        log.debug(sqlQuery);
+        statement.execute(sqlQuery);
+    }
+
 
 
 }

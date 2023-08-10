@@ -27,8 +27,12 @@ public class SqlConverter {
         }
         return hashMap;
     }
-    public static int convertSqlQueryToInt(ResultSet resultSet, String botState) throws SQLException {
+    public static int convertSqlQueryToInt(ResultSet resultSet, String label) throws SQLException {
         resultSet.next();
-        return resultSet.getInt(botState);
+        return resultSet.getInt(label);
+    }
+    public static char convertSqlToChar(ResultSet resultSet,String label) throws SQLException {
+        resultSet.next();
+        return resultSet.getString(label).charAt(0);
     }
 }
