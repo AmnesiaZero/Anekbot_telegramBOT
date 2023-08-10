@@ -7,12 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 public interface BotCommands {
-
-     List<BotCommand> LIST_OF_COMMANDS = List.of(
+    List<BotCommand> LIST_OF_COMMANDS = List.of(
             new BotCommand("/start", "start bot"),
             new BotCommand("/help", "bot info"),
             new BotCommand("/theme", "chose bot theme"),
-            new BotCommand("/auto","set auto mode")
+            new BotCommand("/auto","set auto mode"),
+             new BotCommand("/stop","stop bot")
     );
 
     String HELP_TEXT = "Привет,это бот с анекдотами. Я помогу выбрать тебе подходящий тебе по теме анекдот.Чтобы начать работу с ботом нажмите /start" +

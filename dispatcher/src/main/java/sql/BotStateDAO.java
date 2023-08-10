@@ -2,6 +2,7 @@ package sql;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
+import states.BotStates;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +53,13 @@ public class BotStateDAO {
     public void setChosenLetter(Long chatId,char letter) throws SQLException {
         Statement statement = dataSource.getConnection().createStatement();
         String sqlQuery = "UPDATE `bot_state_store` SET `chosen_letter`='"+letter +"' WHERE `chat_id`="+ chatId;
+        log.debug(sqlQuery);
+        statement.execute(sqlQuery);
+    }
+    public void setDefaultStateForAll() throws SQLException {
+        Statement statement = dataSource.getConnection().createStatement();
+        int defaultState = new BotStates().getDefaultState();
+        String sqlQuery = "UPDATE `bot_state_store` SET `bot_state`=" + defaultState;
         log.debug(sqlQuery);
         statement.execute(sqlQuery);
     }

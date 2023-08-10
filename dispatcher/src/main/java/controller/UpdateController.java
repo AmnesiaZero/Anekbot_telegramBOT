@@ -19,7 +19,7 @@ public class UpdateController implements BotCommands {
     private BotStates botStates = new BotStates();
     private boolean autoState = false;
     private LinkedHashMap<Integer,String> neededThemes;
-    private boolean backLetterFlag = false;
+    private boolean flag = false;
     private boolean backAnekdotFlag = false;
     public void registerBot(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
@@ -86,6 +86,7 @@ public class UpdateController implements BotCommands {
                 break;
             case "/back":
                 log.debug("entered /back");
+                flag = true;
                 goBack(update);
                 break;
             default:
@@ -98,7 +99,7 @@ public class UpdateController implements BotCommands {
         else if (botState == botStates.getChooseThemeLetterState())
             chooseThemeLetter(update);
         else if (botState == botStates.getChooseThemeState()) {
-            if (!backLetterFlag) setChosenLetter(update, receivedMessageText);
+            if (!flag) setChosenLetter(update, receivedMessageText);
             else displayThemes(update);
         } else if (botState == botStates.getChooseAnekdotState()){
             displayAnekdot(update, receivedMessageText);
@@ -107,7 +108,7 @@ public class UpdateController implements BotCommands {
             sendHelpMessage(update);
         else
             log.debug("Состояние - " + botState);
-
+        flag = false;
     }
 
     private void sendHelpMessage(Update update) {
@@ -129,12 +130,10 @@ public class UpdateController implements BotCommands {
             setBotState(update, botStates.getStartState());
          } else if (botState==botStates.getChooseAnekdotState()) {
             log.debug("enter 4");
-            backLetterFlag = true;
             setBotState(update,botStates.getChooseThemeLetterState());
         }
         else if (botState==botStates.getFinishAnekdotState()) {
             log.debug("enter 5");
-            backLetterFlag = true;
             setBotState(update,botStates.getChooseThemeState());
         }
         else
@@ -162,8 +161,8 @@ public class UpdateController implements BotCommands {
 
     private void runAutoMode(Update update){
 //        Long sleepTime = (long) receivedTime * 60000;
-//        boolean backLetterFlag = true;
-//        while (backLetterFlag){
+//        boolean flag = true;
+//        while (flag){
 //            try {
 //                log.info("Вошёл в сон");
 //                Thread.sleep(sleepTime);
@@ -180,10 +179,6 @@ public class UpdateController implements BotCommands {
     }
     private void setChosenLetter(Update update,String receivedMessageText) throws SQLException {
         log.debug("Вошёл в функцию setChosenLetter");
-//        if(receivedMessageText.length()>1){
-//            telegramBot.getMessageSender().sendMessage(update,"Пожалуйста,введите 1 символ",GenericButtons.inlineMarkup());
-//            return;
-//        }
         char themeLetter = receivedMessageText.charAt(0);
         log.debug("Установлена буква " + themeLetter);
         telegramBot.getSqlController().getBotStateDAO().setChosenLetter(MessageUtils.getChatId(update),themeLetter);
@@ -191,11 +186,6 @@ public class UpdateController implements BotCommands {
     }
     private void displayThemes(Update update) throws SQLException {
         log.debug("Вошёл в функцию displayThemes");
-//        if(receivedMessageText.length()>1){
-//            telegramBot.getMessageSender().sendMessage(update,"Пожалуйста,введите 1 символ",GenericButtons.inlineMarkup());
-//            return;
-//        }
-//        char themeLetter = receivedMessageText.charAt(0);
         char themeLetter = getChosenLetter(update);
         log.debug("Буква - "+ themeLetter);
         String replyText = "Выберите тему анекдота:\n";

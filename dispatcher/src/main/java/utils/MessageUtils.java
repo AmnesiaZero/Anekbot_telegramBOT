@@ -21,9 +21,9 @@ public class MessageUtils {
     }
     public static String getUsername(Update update){
         if(update.getMessage()!=null)
-            return update.getMessage().getFrom().getUserName();
+            return update.getMessage().getFrom().getFirstName();
         else
-            return update.getCallbackQuery().getFrom().getUserName();
+            return update.getCallbackQuery().getFrom().getFirstName();
     }
     public static String getMessageText(Update update){
         if(update.getMessage()!=null)
