@@ -31,6 +31,12 @@ public class MessageUtils {
         else
             return update.getCallbackQuery().getData();
     }
+    public static Long getUserId(Update update){
+        if(update.getMessage()!=null)
+            return update.getMessage().getFrom().getId();
+        else
+            return update.getCallbackQuery().getFrom().getId();
+    }
     public static Long getChatId(Update update){
         if(update.getMessage()!=null)
             return update.getMessage().getChatId();

@@ -13,7 +13,7 @@ public class AnekbotApplication {
 	public static void main(String[] args) throws SQLException, TelegramApiException {
 		TelegramBot telegramBot = new TelegramBot();
 		telegramBot.getUpdateController().registerBot(telegramBot);
-		telegramBot.getSqlController().getBotStateDAO().setDefaultStateForAll();
+//		telegramBot.getSqlController().getBotStateDAO().setDefaultStateForAll();
 		MessageReceiver messageReceiver = new MessageReceiver(telegramBot);
 		MessageSender messageSender = new MessageSender(telegramBot);
 		telegramBot.loadMessageHandlers(messageReceiver,messageSender);

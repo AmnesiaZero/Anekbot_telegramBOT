@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-public class ButtonsInitializer implements BotCommands {
+public class ButtonsInitializer {
     public InlineKeyboardButton themeButton = new InlineKeyboardButton(EmojiParser.parseToUnicode(":abcd:theme"));
     public InlineKeyboardButton backButton = new InlineKeyboardButton(EmojiParser.parseToUnicode(":arrow_left:back"));
     public InlineKeyboardButton helpButton = new InlineKeyboardButton(EmojiParser.parseToUnicode(":spiral_note_pad:help"));
@@ -19,7 +19,7 @@ public class ButtonsInitializer implements BotCommands {
         helpButton.setCallbackData("/help");
         startButton.setCallbackData("/start");
         againButton.setCallbackData("/start");
-        stopButton.setCallbackData();
+        stopButton.setCallbackData("/stop");
     }
     public InlineKeyboardMarkup getInlineMarkup(List<InlineKeyboardButton> rowInline){
         List<List<InlineKeyboardButton>> rowsInLine = List.of(rowInline);

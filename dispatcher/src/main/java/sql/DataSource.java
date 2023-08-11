@@ -13,9 +13,7 @@ import java.util.Properties;
 @Data
 public class DataSource {
     static String url ;
-
     static String username;
-
     static String password;
     public Connection connection;
     public DataSource() throws SQLException {
@@ -31,7 +29,4 @@ public class DataSource {
         }
         connection =  DriverManager.getConnection(url,username,password);
     }
-
-
-
 }

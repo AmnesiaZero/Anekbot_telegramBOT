@@ -18,7 +18,7 @@ public class UpdateController implements BotCommands {
     private TelegramBot telegramBot;
     private BotStates botStates = new BotStates();
     private boolean autoState = false;
-    private LinkedHashMap<Integer,String> neededThemes;
+//    private LinkedHashMap<Integer,String> chosenThemes;
     private boolean flag = false;
     private boolean backAnekdotFlag = false;
     public void registerBot(TelegramBot telegramBot){
@@ -26,8 +26,6 @@ public class UpdateController implements BotCommands {
     }
     public void processUpdate(Update update) throws SQLException {
         log.debug("Вошёл в функцкию processUpdate");
-        if(!telegramBot.getSqlController().getBotStateDAO().chatIdExist(MessageUtils.getChatId(update)))
-           setBotState(update,botStates.getStartState());
         distributeMessageByType(update);
     }
     private void distributeMessageByType(Update update) throws SQLException {
@@ -49,7 +47,7 @@ public class UpdateController implements BotCommands {
         var recievedMessage = update.getMessage();
         log.info("Получено неподдерживаемое сообщение");
         log.info(recievedMessage.getText());
-        telegramBot.getMessageSender().sendMessage(update,"Скинь что-то более понятное",GenericButtons.inlineMarkup());
+//        telegramBot.getMessageSender().sendMessage(update,"Скинь что-то более понятное",GenericButtons.inlineMarkup());
     }
 
 
@@ -99,6 +97,7 @@ public class UpdateController implements BotCommands {
         else if (botState == botStates.getChooseThemeLetterState())
             chooseThemeLetter(update);
         else if (botState == botStates.getChooseThemeState()) {
+            log.debug("entered theme");
             if (!flag) setChosenLetter(update, receivedMessageText);
             else displayThemes(update);
         } else if (botState == botStates.getChooseAnekdotState()){
@@ -124,16 +123,16 @@ public class UpdateController implements BotCommands {
         int botState = getBotState(update);
         if (botState == botStates.getChooseThemeLetterState()) {
             setBotState(update, botStates.getStartState());
-            log.debug("enter 2");
+            log.debug("enter 1");
         } else if (botState == botStates.getChooseThemeState()){
-            log.debug("enter 3");
+            log.debug("enter 2");
             setBotState(update, botStates.getStartState());
          } else if (botState==botStates.getChooseAnekdotState()) {
-            log.debug("enter 4");
+            log.debug("enter 3");
             setBotState(update,botStates.getChooseThemeLetterState());
         }
         else if (botState==botStates.getFinishAnekdotState()) {
-            log.debug("enter 5");
+            log.debug("enter 4");
             setBotState(update,botStates.getChooseThemeState());
         }
         else
@@ -181,29 +180,37 @@ public class UpdateController implements BotCommands {
         log.debug("Вошёл в функцию setChosenLetter");
         char themeLetter = receivedMessageText.charAt(0);
         log.debug("Установлена буква " + themeLetter);
-        telegramBot.getSqlController().getBotStateDAO().setChosenLetter(MessageUtils.getChatId(update),themeLetter);
+        telegramBot.getSqlController().getBotStateDAO().setChosenLetter(update,themeLetter);
         displayThemes(update);
     }
     private void displayThemes(Update update) throws SQLException {
         log.debug("Вошёл в функцию displayThemes");
-        char themeLetter = getChosenLetter(update);
-        log.debug("Буква - "+ themeLetter);
         String replyText = "Выберите тему анекдота:\n";
-        LinkedHashMap<Integer,String> allThemes = telegramBot.getSqlController().getThemesDAO().getThemes();
-        neededThemes = new LinkedHashMap<>();
-        allThemes.forEach((key, value) -> {
-            String shortTheme = value.replace("Анекдоты про ","");
-            if(shortTheme.charAt(0)==themeLetter)
-                neededThemes.put(key,value);
-        });
-        int count=1;
-        if(neededThemes.size()==0){
-            log.debug("Количество тем = 0");
-            telegramBot.getMessageSender().sendMessage(update,"К сожалению,таких тем нет",GenericButtons.inlineMarkup());
+//        char themeLetter = getChosenLetter(update);
+//        log.debug("Буква - "+ themeLetter);
+//        LinkedHashMap<Integer,String> allThemes = telegramBot.getSqlController().getThemesDAO().getThemes();
+//        chosenThemes = new LinkedHashMap<>();
+//        allThemes.forEach((key, value) -> {
+//            String shortTheme = value.replace("Анекдоты про ","");
+//            if(shortTheme.charAt(0)==themeLetter)
+//                chosenThemes.put(key,value);
+//        });
+//        if(chosenThemes.size()==0){
+//            log.debug("Количество тем = 0");
+//            telegramBot.getMessageSender().sendMessage(update,"К сожалению,таких тем нет",GenericButtons.inlineMarkup());
+//            return;
+//        }
+        LinkedHashMap<Integer,String> chosenThemes = getChosenThemes(update);
+        if(chosenThemes ==null){
+            log.error("Нет списка нужных тем");
+            telegramBot.getMessageSender().sendMessage(update,"Ошибка:нет нужных тем",GenericButtons.inlineMarkup());
+            goBack(update);
+            setBotState(update,botStates.getStartState());
             return;
         }
-        for (Integer key: neededThemes.keySet()) {
-            String themeText = count + ")" + neededThemes.get(key) + "\n";
+        int count=1;
+        for (Integer key: chosenThemes.keySet()) {
+            String themeText = count + ")" + chosenThemes.get(key) + "\n";
             replyText +=themeText;
             count++;
         }
@@ -211,17 +218,32 @@ public class UpdateController implements BotCommands {
         telegramBot.getMessageSender().sendMessage(update,replyText,GenericButtons.inlineMarkup());
         setBotState(update,botStates.getChooseAnekdotState());
     }
+    private LinkedHashMap<Integer,String> getChosenThemes(Update update) throws SQLException {
+        log.debug("Вошёл в функцию displayThemes");
+        char themeLetter = getChosenLetter(update);
+        log.debug("Буква - "+ themeLetter);
+        LinkedHashMap<Integer,String> allThemes = telegramBot.getSqlController().getThemesDAO().getThemes();
+        LinkedHashMap<Integer,String> chosenThemes = new LinkedHashMap<>();
+        allThemes.forEach((key, value) -> {
+            String shortTheme = value.replace("Анекдоты про ","");
+            if(shortTheme.charAt(0)==themeLetter)
+                chosenThemes.put(key,value);
+        });
+        if(chosenThemes.size()==0){
+            log.debug("Количество тем = 0");
+            telegramBot.getMessageSender().sendMessage(update,"К сожалению,таких тем нет",GenericButtons.inlineMarkup());
+            return null;
+        }
+        return chosenThemes;
+    }
     private void setBotState(Update update,int botState) throws SQLException {
-         telegramBot.getSqlController().getBotStateDAO().setBotState(MessageUtils.getChatId(update),botState);
+         telegramBot.getSqlController().getBotStateDAO().setBotState(update,botState);
     }
     private int getBotState(Update update) throws SQLException {
-        return telegramBot.getSqlController().getBotStateDAO().getBotState(MessageUtils.getChatId(update));
+        return telegramBot.getSqlController().getBotStateDAO().getBotState(update);
     }
     private char getChosenLetter(Update update) throws SQLException {
-        return telegramBot.getSqlController().getBotStateDAO().getChosenLetter(MessageUtils.getChatId(update));
-    }
-    private int getThemeId(Update update) throws SQLException {
-        return telegramBot.getSqlController().getBotStateDAO().getBotState(MessageUtils.getChatId(update));
+        return telegramBot.getSqlController().getBotStateDAO().getChosenLetter(update);
     }
 
     private void displayAnekdot(Update update, String receivedMessageText) throws SQLException {
@@ -238,22 +260,23 @@ public class UpdateController implements BotCommands {
             setBotState(update,botStates.getStartState());
             return;
         }
-        if(neededThemes==null){
+        LinkedHashMap<Integer,String> chosenThemes = getChosenThemes(update);
+        if(chosenThemes ==null){
             log.error("Нет списка нужных тем");
             telegramBot.getMessageSender().sendMessage(update,"Ошибка:нет нужных тем",GenericButtons.inlineMarkup());
             goBack(update);
             setBotState(update,botStates.getStartState());
             return;
         }
-        if(chosenThemeId>neededThemes.size()|chosenThemeId<=0){
+        if(chosenThemeId> chosenThemes.size()|chosenThemeId<=0){
             log.debug("Выбран неккоректный номер");
             telegramBot.getMessageSender().sendMessage(update,"Выбран неккоректный номер",null);
             goBack(update);
             setBotState(update,botStates.getStartState());
             return;
         }
-        log.debug("Id темы - " +neededThemes.values().toArray()[chosenThemeId-1]);
-        int themeId =(int)neededThemes.keySet().toArray()[chosenThemeId-1];//получение id темы из выбранного номера
+        log.debug("Id темы - " + chosenThemes.values().toArray()[chosenThemeId-1]);
+        int themeId =(int) chosenThemes.keySet().toArray()[chosenThemeId-1];//получение id темы из выбранного номера
 //        if(autoState){
 //            while (autoState){
 //                sendAnekdotText(update,themeId);
