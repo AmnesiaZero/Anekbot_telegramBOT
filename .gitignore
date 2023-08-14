@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Project properties ###
+dispatcher/src/main/resources/bot.properties
+dispatcher/src/main/resources/sql.properties
