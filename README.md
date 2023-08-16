@@ -8,8 +8,8 @@ Technology stack:<br />
 - [ ] Host on server
 - [x] Parse data to MySQL DB(100k rows)
 - [x] Add filter by themes letter
-- [ ] Add inline buttons
-- [ ] Add multi-threads
+- [x] Add inline buttons
+- [x] Add multi-threads
 - [ ] Add function to send anekdot once in selected period of time
 - [ ] Add rabitMQ
 - [ ] Add higher quality anekdots
