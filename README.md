@@ -21,6 +21,7 @@
 - [ ] Выпустить финальную версию
 
 ### Скрины
+![image](https://github.com/AmnesiaZero/Anekbot_telegramBOT/assets/90193990/be3c4a3c-c764-45ed-a37b-2f6f83a524fd)
 ![image](https://github.com/AmnesiaZero/Anekbot_telegramBOT/assets/90193990/690036b7-1b95-4b27-af74-48520a269ccb)
 
 
