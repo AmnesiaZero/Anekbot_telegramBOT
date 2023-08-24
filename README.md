@@ -1,19 +1,26 @@
 # Anekbot
-Technology stack:<br />
-1)Java(Vanila)<br />
-2)TelegramLongPolling<br />
-3)Maven<br />
-4)MySQL
-- [x] Add basic functions
-- [ ] Host on server
-- [x] Parse data to MySQL DB(100k rows)
-- [x] Add filter by themes letter
-- [x] Add inline buttons
-- [x] Add multi-threads
-- [ ] Add function to send anekdot once in selected period of time
-- [ ] Add rabitMQ
-- [ ] Add higher quality anekdots
-- [ ] Refactor for Spring Boot and Webhooks
-- [ ] Launch final version
+###  Технологии :
+<div>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original-wordmark.svg" title="Java" alt="Java" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original-wordmark.svg" title="React" alt="React" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original-wordmark.svg" title="Spring" alt="Spring" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/css3/css3-plain-wordmark.svg"  title="CSS3" alt="CSS" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg" title="HTML5" alt="HTML" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/mysql/mysql-original-wordmark.svg" title="MySQL"  alt="MySQL" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original-wordmark.svg" title="Git" **alt="Git" width="40" height="40"/>
+</div>
+
+## Список задач
+- [x] Добавить базовый функционад
+- [x] Запарсить данные в MySQL DB
+- [x] Добавить фильтр тем 
+- [x] Добавить inline кнопки
+- [x] Добавить многопоточность
+- [ ] Добавить систему состояний
+- [ ] Добавить возможность возвращаться,к прошлому состоянию бота
+- [ ] Добавить функцию,отправляющую сообщение раз в выбранный период времени
+- [ ] Добавить rabitMQ
+- [ ] Захостить на сервере
+- [ ] Выпустить финальную версию
 
 
